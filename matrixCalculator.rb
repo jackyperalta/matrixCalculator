@@ -4,14 +4,44 @@
    # date: 4/24/2021
    # Student 1: Jacqueline Peralta
    # Student 2: Angel Lopez
-   # Student 3: 
+   # Student 3:
    # description: Implementation of a matrix calculator
 
 require 'tk'
 
-root = TkRoot.new { title "Hello, World!" }
+root = TkRoot.new { title "Matrix Calculator" }
 TkLabel.new(root) do
-    text 'Hello, World!'
+    text 'Matrix Calculator'
     pack { padx 15 ; pady 15; side 'left' }
 end
+
+# Designate two entry boxes and button for matrix entry box creation
+$entry1Val = TkVariable.new
+$entey2Val = TkVariable.new
+entry1 = TkEntry.new(root) { textvariable $entry1Val }
+entry2 = TkEntry.new(root) { textvariable $entry2Val }
+btn_createMatrix1 = TkButton.new(root) do
+    text "CREATE Matrix 1"
+    borderwidth 5
+    underline 0
+    state "normal"
+    cursor "hand2"
+    relief "groove"
+    activebackground "blue"
+    command {btn_createMatrix1_click}
+end
+
+entry1.insert(0, 0)     # inserting default values to entry boxes
+entry2.insert(0, 0)
+
+# Place widgets in GUI window
+btn_createMatrix1.place('height' => 25, 'width' => 100, 'x' => 80, 'y' => 20)
+entry1.place('height' => 25, 'width' => 30, 'x' => 10, 'y' => 20)
+entry2.place('height' => 25, 'width' => 30, 'x' => 40, 'y' => 20)
+
+# button click funciton
+def btn_createMatrix1_click
+    puts $entry1Val     # output what is in entry box 1
+end
+
 Tk.mainloop

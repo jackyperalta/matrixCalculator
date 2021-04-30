@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Matrix Calculator</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+
+  <link rel="stylesheet" href="">
+  <style>
+    body
+    {
+        font-family: Arial;
+        font-size: 10pt;
+    }
+    .createTable table
+    {
+        border: 1px solid #ccc;
+        float: left;
+        margin-left: 9px;
+        margin-right: 14px;
+    }
+    .createTable table th
+    {
+        background-color: #F7F7F7;
+        color: #333;
+        font-weight: bold;
+    }
+    .createTable table th, table td
+    {
+        padding: 5px;
+        border-color: #ccc;
+    }
+  </style>
+</head>
+
+    <h2>Matrix Calculator</h2>
+    <hr />
+    <input type="file" id="fileUpload" />
+    <input type="button" id="upload" value="Load A" onclick = "Upload()" />
+    <input type="file" id="secondUpload" />
+    <input type="button" id="upload2" value="Load B" onclick = "Upload2()" />
+    <hr />
+    <div class="createTable" id="aCSV"></div>
+    <div class="createTable" id="bCSV"></div>
+    
+    <table>
+        <tr><th>Unary Operations</th></tr>
+    </table>
+    
+    <table>
+        <tr>
+            <td><input type="button" value="A=I" onClick="identity(A,id,C)"> </td>
+            <td><input type="button" value="B=I" onClick="identity(B,id,C)"> </td>
+            <td><input type="button" value="AT" onClick="transpose(A,trans,C)"> </td>
+            <td><input type="button" value="BT" onClick="transpose(A,trans,C)"> </td>
+            <td><input type="button" value="inv(A)" onClick="inv(A,deta,C)"> </td>
+            <td><input type="button" value="inv(B)" onClick="inv(B,detb,C)"> </td>
+        </tr>
+    </table>
+    
+    <table>
+        <td><form name="deta">
+            <p>
+            <input type="button" value="det(A)" onClick="det(A, deta)"><input type="text" name="output" size="5">
+            </p>
+        </form>
+        </td>
+        <td><form name="detb">
+            <p><input type="button" value="det(B)" onClick="det(B,detb)"> <input type="text"
+            name="output" size="5"> </p>
+          </form>
+        </td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td><form name="scaleA">
+            <p><input type="button" value="nA" onClick="scalar(A,na)"> <input type="text" name="output" size="5"></p>
+          </form>
+        </td>
+        <td><form name="scaleB">
+            <p><input type="button" value="nB" onClick="scalar(B,nb)"> <input type="text" name="output" size="5"> </p>
+          </form>
+        </td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td><form name="powerA">
+            <p><input type="button" value="power(A)" onClick="power(A,na)"> <input type="text" name="output" size="5"></p>
+          </form>
+        </td>
+        <td><form name="powerB">
+            <p><input type="button" value="power(B)" onClick="power(B,nb)"> <input type="text" name="output" size="5"> </p>
+          </form>
+        </td>
+    </table>
+    
+    <table>
+        <tr><th>Binary Operations</th></tr>
+    </table>
+    
+    <table>
+        <tr>
+            <td><input type="button" value="A+B" onClick="add(A,B,C)"></td>
+            <td><input type="button" value="A-B" onClick="sub(A,B,C)"></td>
+            <td><input type="button" value="B-A" onClick="sub(B,A,C)"></td>
+            <td><input type="button" value="AB" onClick="mult(A,B,C)"></td>
+            <td><input type="button" value="BA" onClick="mult(B,A,C)"></td>
+            <td><input type="button" value="Copy A to B" onClick="copy(A,B)"></td>
+            <td><input type="button" value="Copy B to A" onClick="copy(B,A)"></td>
+            <td><input type="button" value="Swap A to B" onClick="swap()"></td>
+        </tr>
+    </table>
+    
+<script type="text/javascript">
+    function Upload() {
+        var fileUpload = document.getElementById("fileUpload");
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var table = document.createElement("table");
+                    table.setAttribute = ("id", "table1");
+                    var rows = e.target.result.split("\n");
+                    for (var i = 0; i < rows.length; i++) {
+                        var row = table.insertRow(-1);
+                        var cells = rows[i].split(",");
+                        for (var j = 0; j < cells.length; j++) {
+                            var cell = row.insertCell(-1);
+                            cell.innerHTML = cells[j];
+                            var tdID = 'a'+i+j;
+                            cell.setAttribute("id", tdID);
+                        }
+                    }
+                    var aCSV = document.getElementById("aCSV");
+                    aCSV.innerHTML = "";
+                    aCSV.appendChild(table);
+                }
+                reader.readAsText(fileUpload.files[0]);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        } else {
+            alert("You can only upload CSV files.");
+        }
+    }
+
+    function Upload2() {
+        var fileUpload = document.getElementById("secondUpload");
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var table = document.createElement("table");
+                    table.setAttribute = ("id", "table2");
+                    var rows = e.target.result.split("\n");
+                    for (var i = 0; i < rows.length; i++) {
+                        var row = table.insertRow(-1);
+                        var cells = rows[i].split(",");
+                        for (var j = 0; j < cells.length; j++) {
+                            var cell = row.insertCell(-1);
+                            cell.innerHTML = cells[j];
+                            var tdID = 'b'+i+j;
+                            cell.setAttribute("id", tdID );
+                        }
+                    }
+                    var bCSV = document.getElementById("bCSV");
+                    bCSV.innerHTML = "";
+                    bCSV.appendChild(table);
+                }
+                reader.readAsText(fileUpload.files[0]);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        } else {
+            alert("You can only upload CSV files.");
+        }
+    }
+
+    function swap () {
+        // replace 9 with reading the length of row and column 
+        for(var i = 0; i < 9; i++){
+            for(var j = 0; j < 9; j++){
+                var x = document.getElementById('a'+i+j);
+                //console.log(x);
+                var y = document.getElementById('b'+i+j);
+                //console.log(y);
+                var z = x.innerHTML;
+                x.innerHTML = y.innerHTML;
+                y.innerHTML = z;
+            }
+        }
+    }
+        // more functions coming soon..
+    </script>
+</body>
+</html>

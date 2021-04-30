@@ -74,6 +74,5 @@ print matrixB
 
 string_num = matrixB[0][0]
 print "\nstring num: ", string_num
-num = string_num.to_i
+num = string_num
 print "\nnum: ", num
-

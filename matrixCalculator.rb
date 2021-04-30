@@ -4,10 +4,11 @@
    # date: 4/24/2021
    # Student 1: Jacqueline Peralta
    # Student 2: Angel Lopez
-   # Student 3:
+   # Student 3: Aldair Martinez
    # description: Implementation of a matrix calculator
 
 require 'tk'
+
 
 root = TkRoot.new { title "Matrix Calculator" }
 TkLabel.new(root) do
@@ -45,3 +46,34 @@ def btn_createMatrix1_click
 end
 
 Tk.mainloop
+
+
+#Code for storing csv to array/matrix
+require 'csv'
+
+row, col = 8, 8
+index = 0
+puts "Matrix A\n"
+matrixA = Array.new(row){Array.new(col)}
+#for i in 0..9
+CSV.foreach("A.csv") do |row|
+    matrixA[index] = row
+    index = index + 1
+end
+#end
+print matrixA
+
+puts "\n\nMatrix B\n"
+index = 0
+matrixB = Array.new(row){Array.new(col)}
+  CSV.foreach("B.csv") do |row|
+    matrixB[index] = row
+    index = index + 1
+  end
+print matrixB
+
+string_num = matrixB[0][0]
+print "\nstring num: ", string_num
+num = string_num.to_i
+print "\nnum: ", num
+

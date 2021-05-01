@@ -1,12 +1,8 @@
 <!doctype html>
-<html lang="en">
+<br lang="en">
 <head>
   <meta charset="utf-8">
-
   <title>Matrix Calculator</title>
-  <meta name="description" content="The HTML5 Herald">
-  <meta name="author" content="SitePoint">
-
   <link rel="stylesheet" href="">
   <style>
     body
@@ -21,34 +17,25 @@
         margin-left: 9px;
         margin-right: 14px;
     }
-    .createTable table th
-    {
-        background-color: #F7F7F7;
-        color: #333;
-        font-weight: bold;
-    }
     .createTable table th, table td
     {
-        padding: 5px;
-        border-color: #ccc;
+        padding: 7px;
     }
   </style>
 </head>
-
+<body>
     <h2>Matrix Calculator</h2>
-    <hr />
+    <hr/>
     <input type="file" id="fileUpload" />
     <input type="button" id="upload" value="Load A" onclick = "Upload()" />
     <input type="file" id="secondUpload" />
     <input type="button" id="upload2" value="Load B" onclick = "Upload2()" />
-    <hr />
-    <div class="createTable" id="aCSV"></div>
-    <div class="createTable" id="bCSV"></div>
-    
-    <table>
-        <tr><th>Unary Operations</th></tr>
-    </table>
-    
+    <hr/>
+    <div class="createTable" id="aCSV"></div> <!-- here goes Matrix A! --> 
+    <div class="createTable" id="bCSV"></div> <!-- here goes Matrix B! --> 
+    <div class="createTable" id="resultTable"></div> <!-- here goes our results! -->
+
+    <table style="margin-top: 320px;"><tr><th>Unary Operations</th></tr></table>
     <table>
         <tr>
             <td><input type="button" value="A=I" onClick="identity(A,id,C)"> </td>
@@ -62,40 +49,36 @@
     
     <table>
         <td><form name="deta">
-            <p>
-            <input type="button" value="det(A)" onClick="det(A, deta)"><input type="text" name="output" size="5">
-            </p>
+            <p><input type="button" value="det(A)" onClick="det(A, deta)"></p>
         </form>
         </td>
         <td><form name="detb">
-            <p><input type="button" value="det(B)" onClick="det(B,detb)"> <input type="text"
-            name="output" size="5"> </p>
+            <p><input type="button" value="det(B)" onClick="det(B,detb)"></p>
           </form>
         </td>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
         <td><form name="scaleA">
-            <p><input type="button" value="nA" onClick="scalar(A,na)"> <input type="text" name="output" size="5"></p>
+            <p><input type="button" value="nA" onClick="nxA()"></p>
           </form>
         </td>
         <td><form name="scaleB">
-            <p><input type="button" value="nB" onClick="scalar(B,nb)"> <input type="text" name="output" size="5"> </p>
+            <p><input type="button" value="nB" onClick="nxB()"></p>
           </form>
         </td>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
         <td><form name="powerA">
-            <p><input type="button" value="power(A)" onClick="power(A,na)"> <input type="text" name="output" size="5"></p>
+            <p><input type="button" value="A^n" onClick="ApowerN"></p>
           </form>
         </td>
         <td><form name="powerB">
-            <p><input type="button" value="power(B)" onClick="power(B,nb)"> <input type="text" name="output" size="5"> </p>
+            <p><input type="button" value="B^n" onClick="BpowerN">
+                <input type="text" id="n" name="output" size="5">
+            </p>
           </form>
         </td>
     </table>
     
-    <table>
-        <tr><th>Binary Operations</th></tr>
-    </table>
-    
+    <table><tr><th>Binary Operations</th></tr></table>
     <table>
         <tr>
             <td><input type="button" value="A+B" onClick="add(A,B,C)"></td>
@@ -103,13 +86,13 @@
             <td><input type="button" value="B-A" onClick="sub(B,A,C)"></td>
             <td><input type="button" value="AB" onClick="mult(A,B,C)"></td>
             <td><input type="button" value="BA" onClick="mult(B,A,C)"></td>
-            <td><input type="button" value="Copy A to B" onClick="copy(A,B)"></td>
-            <td><input type="button" value="Copy B to A" onClick="copy(B,A)"></td>
+            <td><input type="button" value="Copy A to B" onClick="copyAB()"></td>
+            <td><input type="button" value="Copy B to A" onClick="copyBA()"></td>
             <td><input type="button" value="Swap A to B" onClick="swap()"></td>
         </tr>
     </table>
     
-<script type="text/javascript">
+    <script type="text/javascript">
     function Upload() {
         var fileUpload = document.getElementById("fileUpload");
         var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
@@ -126,7 +109,7 @@
                         for (var j = 0; j < cells.length; j++) {
                             var cell = row.insertCell(-1);
                             cell.innerHTML = cells[j];
-                            var tdID = 'a'+i+j;
+                            var tdID = 'a'+i+j; // Important give each cell an id
                             cell.setAttribute("id", tdID);
                         }
                     }
@@ -141,6 +124,8 @@
         } else {
             alert("You can only upload CSV files.");
         }
+
+        generateTable();
     }
 
     function Upload2() {
@@ -159,7 +144,7 @@
                         for (var j = 0; j < cells.length; j++) {
                             var cell = row.insertCell(-1);
                             cell.innerHTML = cells[j];
-                            var tdID = 'b'+i+j;
+                            var tdID = 'b'+i+j; // Important give each cell an id
                             cell.setAttribute("id", tdID );
                         }
                     }
@@ -176,6 +161,24 @@
         }
     }
 
+    // generating table for results
+    function generateTable() {
+        var div = document.getElementById('resultTable');
+        var table = document.createElement('table');
+        var tbdy = document.createElement('tbody');
+        for (var i = 0; i < 9; i++) {
+            var tr = document.createElement('tr');
+            for (var j = 0; j < 9; j++) {
+                var td = document.createElement('td');
+                var tdID = 'c'+i+j; // Important give each cell an id
+                td.setAttribute("id", tdID );
+                tr.appendChild(td);
+            }
+            tbdy.appendChild(tr);
+        }
+        table.appendChild(tbdy);
+        div.appendChild(table);
+    }
     function swap () {
         // replace 9 with reading the length of row and column 
         for(var i = 0; i < 9; i++){
@@ -190,6 +193,70 @@
             }
         }
     }
+
+    function copyAB () {
+        for(var i = 0; i < 9; i++){
+            for(var j = 0; j < 9; j++){
+                var x = document.getElementById('a'+i+j);
+                var y = document.getElementById('b'+i+j);
+                y.innerHTML = x.innerHTML;
+            }
+        }
+    }
+
+    function copyBA () {
+        for(var i = 0; i < 9; i++){
+            for(var j = 0; j < 9; j++){
+                var x = document.getElementById('a'+i+j);
+                var y = document.getElementById('b'+i+j);
+                x.innerHTML = y.innerHTML;
+            }
+        }
+    }
+    
+    function nxA () {
+        for(var i = 0; i < 9; i++){
+            for(var j = 0; j < 9; j++){
+                var x = document.getElementById('a'+i+j);
+                var z = document.getElementById('c'+i+j);
+                var n = document.getElementById('n');
+                z.innerHTML = x.innerHTML * n.value;
+            }
+        }
+    }
+
+    function nxB () {
+        for(var i = 0; i < 9; i++){
+            for(var j = 0; j < 9; j++){
+                var y = document.getElementById('b'+i+j);
+                var z = document.getElementById('c'+i+j);
+                var n = document.getElementById('n');
+                z.innerHTML = y.innerHTML * n.value;
+            }
+        }
+    }
+
+    // function ApowerN () { // matrix must be square
+    //     for(var i = 0; i < 9; i++){
+    //         for(var j = 0; j < 9; j++){
+    //             var x = document.getElementById('a'+i+j);
+    //             var z = document.getElementById('c'+i+j);
+    //             var n = document.getElementById('n');
+    //             // (a00 * a00) + (a01 * a10)
+
+    //         }
+    //     }
+    // }
+
+    // function BpowerN () { // matrix must be square
+    //     for(var i = 0; i < 9; i++){
+    //         for(var j = 0; j < 9; j++){
+    //             var y = document.getElementById('b'+i+j);
+    //             var n = document.getElementById('n');
+    //             y.innerHTML = y.innerHTML * n.value;
+    //         }
+    //     }
+    // }
         // more functions coming soon..
     </script>
 </body>

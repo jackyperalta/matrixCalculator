@@ -88,7 +88,8 @@
                     // Important: give each table an id to later count length of rows and columns
                     table.setAttribute("id", "table1");
                     var rows = e.target.result.split("\n");
-                    for (var i = 0; i < rows.length; i++) {
+                    // subtracted 1 from length of rows as it was outputting an extra row
+                    for (var i = 0; i < rows.length - 1; i++) {
                         var row = table.insertRow(-1);
                         var cells = rows[i].split(",");
                         for (var j = 0; j < cells.length; j++) {
@@ -123,7 +124,7 @@
                     var table = document.createElement("table");
                     table.setAttribute('id', 'table2'); // table given id
                     var rows = e.target.result.split("\n");
-                    for (var i = 0; i < rows.length; i++) {
+                    for (var i = 0; i < rows.length - 1; i++) {
                         var row = table.insertRow(-1);
                         var cells = rows[i].split(",");
                         for (var j = 0; j < cells.length; j++) {
@@ -152,6 +153,7 @@
         var table = document.createElement('table');
         table.setAttribute('id', 'table3'); // table given id
         var tbdy = document.createElement('tbody');
+        // change size of length
         for (var i = 0; i < 9; i++) {
             var tr = document.createElement('tr');
             for (var j = 0; j < 9; j++) {
@@ -166,12 +168,13 @@
         div.appendChild(table);
     }
     
+    /* UNARY OPS */
     function idA () { // Make A and square indentity matrix up to 10x10: A to I
-        var rowLength = document.getElementById('table1').rows.length;
-        var colLength = document.getElementById('table1').rows[0].cells.length;
-        if(rowLength == colLength) {
-            for(var i = 0; i < rowLength - 1; i++){
-                for(var j = 0; j < colLength; j++){
+        var A_rowLength = document.getElementById('table1').rows.length;
+        var A_colLength = document.getElementById('table1').rows[0].cells.length;
+        if(A_rowLength == A_colLength) {
+            for(var i = 0; i < A_rowLength; i++){
+                for(var j = 0; j < A_colLength; j++){
                     var x = document.getElementById('a'+i+j);
                     if(i == j) {
                         x.innerHTML = '1';
@@ -186,12 +189,11 @@
     }
 
     function idB () { // Make B and square indentity matrix up to 10x10: B to I
-        var rowLength = document.getElementById('table2').rows.length;
-        var colLength = document.getElementById('table2').rows[0].cells.length;
-
-        if(rowLength == colLength) {
-            for(var i = 0; i < rowLength - 1; i++){
-                for(var j = 0; j < colLength; j++){
+        var B_rowLength = document.getElementById('table2').rows.length;
+        var B_colLength = document.getElementById('table2').rows[0].cells.length;
+        if(B_rowLength == B_colLength) {
+            for(var i = 0; i < B_rowLength; i++){
+                for(var j = 0; j < B_colLength; j++){
                     var y = document.getElementById('b'+i+j);
                     if(i == j) {
                         y.innerHTML = '1';
@@ -233,56 +235,80 @@
         }
     }
 
-    function detA () { // Determinant of A: det(A); exisits only for square matrices
-        for(var i = 0; i < 9; i++){
-            for(var j = 0; j < 9; j++){
+    // function detA () { // Determinant of A: det(A); exisits only for square matrices
+    //     for(var i = 0; i < 9; i++){
+    //         for(var j = 0; j < 9; j++){
 
-            }
-        }
+    //         }
+    //     }
 
-    }
+    // }
 
-    function detB () { // Determinant of B: det(B)
-        for(var i = 0; i < 9; i++){
-            for(var j = 0; j < 9; j++){
-                var y = document.getElementById('b'+i+j);
-                var z = document.getElementById('c'+i+j);
-                var n = document.getElementById('n');
-                z.innerHTML = y.innerHTML * n.value;
-            }
-        }
-    }
+    // function detB () { // Determinant of B: det(B)
+    //     for(var i = 0; i < 9; i++){
+    //         for(var j = 0; j < 9; j++){
+    //             var y = document.getElementById('b'+i+j);
+    //             var z = document.getElementById('c'+i+j);
+    //             var n = document.getElementById('n');
+    //             z.innerHTML = y.innerHTML * n.value;
+    //         }
+    //     }
+    // }
     /* BINARY OPS */
     function addAB () { // Add A and B: A + B
-        for(var i = 0; i < 9; i++){ // make sure their the same dimension
-            for(var j = 0; j < 9; j++){
-                var x = document.getElementById('a'+i+j);
-                var y = document.getElementById('b'+i+j);
-                var z = document.getElementById('c'+i+j);
-                z.innerHTML = parseInt(x.innerHTML) + parseInt(y.innerHTML);
+        var A_rowLength = document.getElementById('table1').rows.length;
+        var A_colLength = document.getElementById('table1').rows[0].cells.length;
+        var B_rowLength = document.getElementById('table2').rows.length;
+        var B_colLength = document.getElementById('table2').rows[0].cells.length;
+        if(A_rowLength == B_rowLength && A_colLength == B_colLength){
+            for(var i = 0; i < A_rowLength; i++){ // make sure their the same dimension
+                for(var j = 0; j < B_colLength; j++){
+                    var x = document.getElementById('a'+i+j);
+                    var y = document.getElementById('b'+i+j);
+                    var z = document.getElementById('c'+i+j);
+                    z.innerHTML = parseInt(x.innerHTML) + parseInt(y.innerHTML);
+                }
             }
+        } else {
+            alert('Dimensions are not the same! Cannot add matrices.')
         }
     }
 
     function subAB () { // Substract B from A: A - B
-        for(var i = 0; i < 9; i++){
-            for(var j = 0; j < 9; j++){
-                var x = document.getElementById('a'+i+j);
-                var y = document.getElementById('b'+i+j);
-                var z = document.getElementById('c'+i+j);
-                z.innerHTML = parseInt(x.innerHTML) - parseInt(y.innerHTML);
+        var A_rowLength = document.getElementById('table1').rows.length;
+        var A_colLength = document.getElementById('table1').rows[0].cells.length;
+        var B_rowLength = document.getElementById('table2').rows.length;
+        var B_colLength = document.getElementById('table2').rows[0].cells.length;
+        if(A_rowLength == B_rowLength && A_colLength == B_colLength){
+            for(var i = 0; i < A_rowLength; i++){ // make sure their the same dimension
+                for(var j = 0; j < B_colLength; j++){
+                    var x = document.getElementById('a'+i+j);
+                    var y = document.getElementById('b'+i+j);
+                    var z = document.getElementById('c'+i+j);
+                    z.innerHTML = parseInt(x.innerHTML) - parseInt(y.innerHTML);
+                }
             }
+        } else {
+            alert('Dimensions are not the same! Cannot subtract matrices.')
         }
     }
 
     function subBA () { // Substract A from B: B - A
-        for(var i = 0; i < 9; i++){
-            for(var j = 0; j < 9; j++){
-                var x = document.getElementById('a'+i+j);
-                var y = document.getElementById('b'+i+j);
-                var z = document.getElementById('c'+i+j);
-                z.innerHTML = parseInt(y.innerHTML) -  parseInt(x.innerHTML);
+        var A_rowLength = document.getElementById('table1').rows.length;
+        var A_colLength = document.getElementById('table1').rows[0].cells.length;
+        var B_rowLength = document.getElementById('table2').rows.length;
+        var B_colLength = document.getElementById('table2').rows[0].cells.length;
+        if(A_rowLength == B_rowLength && A_colLength == B_colLength){
+            for(var i = 0; i < A_rowLength; i++){ // make sure their the same dimension
+                for(var j = 0; j < B_colLength; j++){
+                    var x = document.getElementById('a'+i+j);
+                    var y = document.getElementById('b'+i+j);
+                    var z = document.getElementById('c'+i+j);
+                    z.innerHTML = parseInt(y.innerHTML) -  parseInt(x.innerHTML);
+                }
             }
+        } else {
+            alert('Dimensions are not the same! Cannot subtract matrices.')
         }
     }
 

@@ -1,0 +1,13 @@
+Unary Operations
+    Determinant of A: det(A)
+    Determinant of B: det(B)
+    A Transpose: A^T
+    B Transpose: B^T
+    Inverse of A: A^-1
+    Inverse of B: B^-1
+    Integer power of A when A is a square matrix: A^n for 1 ≤ n ≤ 10
+    Integer power of B when B is a square matrix: B^n for 1 ≤ n ≤ 10
+
+Binary Operations
+    Multiply A and B: AB
+    Multiply B and A: BA

@@ -98,6 +98,7 @@ def btn_loadMatrix1_click
         index = index + 1
     end
     $matrixA = matrixAtmp
+    $text_Matrix1.delete(1.0, 10.40)
     insert_Matrix1()
 end
 
@@ -110,6 +111,7 @@ def btn_loadMatrix2_click
         index = index + 1
     end
     $matrixB = matrixBtmp
+    $text_Matrix2.delete(1.0, 10.40)
     insert_Matrix2()
 end
 

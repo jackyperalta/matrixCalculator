@@ -1,1 +1,5 @@
-Improvements: failed attempts at making tables' row and column lengths global variables.
+Remaining tasks:
+
+add error handlers
+set global variables
+fix any remaining errors

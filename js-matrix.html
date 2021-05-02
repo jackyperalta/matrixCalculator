@@ -22,6 +22,8 @@
         padding: 7px;
     }
   </style>
+    <!-- <script src="math.js" type="text/javascript"></script> -->
+    <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
 </head>
 <body>
     <h2>Matrix Calculator</h2>
@@ -35,15 +37,16 @@
     <div class="createTable" id="bCSV"></div> <!-- here goes Matrix B! --> 
     <div class="createTable" id="resultTable"></div> <!-- here goes our results! -->
 
-    <table style="margin-top: 320px;"><tr><th>Unary Operations</th></tr></table>
+    <table style="margin-top: 350px;"><tr><th>Unary Operations</th></tr></table>
     <table>
         <tr>
             <td><input type="button" value="A=I" onClick="idA()"> </td>
             <td><input type="button" value="B=I" onClick="idB()"> </td>
-            <td><input type="button" value="AT" onClick="transA()"> </td>
-            <td><input type="button" value="BT" onClick="transeB()"> </td>
+            <td><input type="button" value="A^T" onClick="transA()"> </td>
+            <td><input type="button" value="B^T" onClick="transB()"> </td>
             <td><input type="button" value="inv(A)" onClick="invA()"> </td>
             <td><input type="button" value="inv(B)" onClick="invB()"> </td>
+            <td><input style="width: 120%; border: 2px solid red" type="text" id="answerBox"></td>
         </tr>
     </table>
     
@@ -51,14 +54,12 @@
         <tr>
             <td><input type="button" value="det(A)" onClick="detA()"></td>
             <td><input type="button" value="det(B)" onClick="detB()"></td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td><input type="button" value="nA" onClick="nxA()"></td>
             <td><input type="button" value="nB" onClick="nxB()"></td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td><input type="button" value="A^n" onClick="ApowerN"></td>
-            <td>
-                <input type="button" value="B^n" onClick="BpowerN"><input type="text" id="n" name="output" size="5">
-            </td>
+            <td><input type="button" value="A^n" onClick="ApowerN()"></td>
+            <td><input type="button" value="B^n" onClick="BpowerN()"></td>
+            <td><input placeholder="Enter n" type="text" id="n" name="output" size="5"></td>
         </tr>
     </table>
     
@@ -167,7 +168,18 @@
         table.appendChild(tbdy);
         div.appendChild(table);
     }
-    
+
+    function tableToArray(table) {
+        var result  = [].reduce.call(table.rows, function (result, row) {
+            result.push([].reduce.call(row.cells, function(res, cell) {
+                res.push(cell.textContent);
+                return res;
+            }, []));
+            return result;
+        }, []);
+        return result;
+    }
+
     /* UNARY OPS */
     function idA () { // Make A and square indentity matrix up to 10x10: A to I
         var A_rowLength = document.getElementById('table1').rows.length;
@@ -208,11 +220,11 @@
     }
 
     function nxA () { // Scalar n times A: nA where n is an integer 
-        var rowLength = document.getElementById('table1').rows.length;
-        var colLength = document.getElementById('table1').rows[0].cells.length;
+        var A_rowLength = document.getElementById('table1').rows.length;
+        var A_colLength = document.getElementById('table1').rows[0].cells.length;
 
-        for(var i = 0; i < rowLength; i++){
-            for(var j = 0; j < colLength; j++){
+        for(var i = 0; i < A_rowLength; i++){
+            for(var j = 0; j < A_colLength; j++){
                 var x = document.getElementById('a'+i+j);
                 var z = document.getElementById('c'+i+j);
                 var n = document.getElementById('n');
@@ -222,11 +234,11 @@
     }
 
     function nxB () { // Scalar n times B: nA where n is an integer
-        var rowLength = document.getElementById('table2').rows.length;
-        var colLength = document.getElementById('table2').rows[0].cells.length;
+        var B_rowLength = document.getElementById('table2').rows.length;
+        var B_colLength = document.getElementById('table2').rows[0].cells.length;
 
-        for(var i = 0; i < rowLength; i++){
-            for(var j = 0; j < colLength; j++){
+        for(var i = 0; i < B_rowLength; i++){
+            for(var j = 0; j < B_colLength; j++){
                 var y = document.getElementById('b'+i+j);
                 var z = document.getElementById('c'+i+j);
                 var n = document.getElementById('n');
@@ -235,25 +247,118 @@
         }
     }
 
-    // function detA () { // Determinant of A: det(A); exisits only for square matrices
-    //     for(var i = 0; i < 9; i++){
-    //         for(var j = 0; j < 9; j++){
+    function transA () { // Determinant of A: det(A); exists only for square matrices
+        var A_rowLength = document.getElementById('table1').rows.length;
+        var A_colLength = document.getElementById('table1').rows[0].cells.length;
+        var matrix = document.getElementById('table1');
+        var x = tableToArray(matrix); var mA = math.matrix(x);
+        var trValue = math.transpose(mA);
+        for(var i = 0; i < A_rowLength; i++){
+            for(var j = 0; j < A_colLength; j++){
+                var z = document.getElementById('c'+i+j);
+                z.innerHTML = trValue.subset(math.index(i, j));
+            }
+        }
+        console.log(trValue);
+    }
 
-    //         }
-    //     }
+    function transB () { // Determinant of B: det(B)
+        var B_rowLength = document.getElementById('table2').rows.length;
+        var B_colLength = document.getElementById('table2').rows[0].cells.length;
+        var matrix = document.getElementById('table2');
+        var x = tableToArray(matrix); var mB = math.matrix(x);
+        var trValue = math.transpose(mB);
+        for(var i = 0; i < B_rowLength; i++){
+            for(var j = 0; j < B_colLength; j++){
+                var z = document.getElementById('c'+i+j);
+                z.innerHTML = trValue.subset(math.index(i, j));
+            }
+        }
+        console.log(trValue);
+    }
 
-    // }
+    function detA () { // Determinant of A: det(A); exists only for square matrices
+        var matrix = document.getElementById('table1');
+        var ansTxt = document.getElementById('answerBox');
 
-    // function detB () { // Determinant of B: det(B)
-    //     for(var i = 0; i < 9; i++){
-    //         for(var j = 0; j < 9; j++){
-    //             var y = document.getElementById('b'+i+j);
-    //             var z = document.getElementById('c'+i+j);
-    //             var n = document.getElementById('n');
-    //             z.innerHTML = y.innerHTML * n.value;
-    //         }
-    //     }
-    // }
+        var x = tableToArray(matrix);
+        var detValue = math.det(x); //console.log(detValue);
+        ansTxt.value = "Det(A) = " + detValue;
+    }
+
+    function detB () { // Determinant of B: det(B)
+        var matrix = document.getElementById('table2');
+        var ansTxt = document.getElementById('answerBox');
+
+        var x = tableToArray(matrix);
+        var detValue = math.det(x); //console.log(detValue);
+        ansTxt.value = "Det(B) = " + detValue;
+    }
+
+    function invA () { // Determinant of A: det(A); exists only for square matrices
+        var A_rowLength = document.getElementById('table1').rows.length;
+        var A_colLength = document.getElementById('table1').rows[0].cells.length;
+        var matrix = document.getElementById('table1');
+        var x = tableToArray(matrix); var mA = math.matrix(x);
+        var invValue = math.inv(mA);
+        for(var i = 0; i < A_rowLength; i++){
+            for(var j = 0; j < A_colLength; j++){
+                var z = document.getElementById('c'+i+j);
+                z.innerHTML = invValue.subset(math.index(i, j));
+            }
+        }
+        console.log(invValue);
+    }
+
+    function invB () { // Determinant of B: det(B)
+        var B_rowLength = document.getElementById('table2').rows.length;
+        var B_colLength = document.getElementById('table2').rows[0].cells.length;
+        var matrix = document.getElementById('table2');
+        var x = tableToArray(matrix); var mB = math.matrix(x);
+        var invValue = math.inv(mB);
+        for(var i = 0; i < B_rowLength; i++){
+            for(var j = 0; j < B_colLength; j++){
+                var z = document.getElementById('c'+i+j);
+                z.innerHTML = invValue.subset(math.index(i, j));
+            }
+        }
+        console.log(invValue);
+    }
+
+    function ApowerN () { // Determinant of A: det(A); exists only for square matrices
+        var A_rowLength = document.getElementById('table1').rows.length;
+        var A_colLength = document.getElementById('table1').rows[0].cells.length;
+        var matrix = document.getElementById('table1');
+        var x = tableToArray(matrix); var mA = math.matrix(x);
+        var n = document.getElementById('n');
+
+        var ApowN = math.pow(mA, n.value);
+        for(var i = 0; i < A_rowLength; i++){
+            for(var j = 0; j < A_colLength; j++){
+                var z = document.getElementById('c'+i+j);
+                z.innerHTML = ApowN.subset(math.index(i, j));
+            }
+        }
+        console.log(ApowN);
+    }
+
+    function BpowerN () { // Determinant of B: det(B)
+        var B_rowLength = document.getElementById('table2').rows.length;
+        var B_colLength = document.getElementById('table2').rows[0].cells.length;
+        var matrix = document.getElementById('table2');
+        var x = tableToArray(matrix); var mB = math.matrix(x);
+        var n = document.getElementById('n');
+
+        var BpowN = math.pow(mB, n.value);
+        for(var i = 0; i < B_rowLength; i++){
+            for(var j = 0; j < B_colLength; j++){
+                var z = document.getElementById('c'+i+j);
+                z.innerHTML = BpowN.subset(math.index(i, j));
+            }
+        }
+        console.log(BpowN);
+    }
+
     /* BINARY OPS */
     function addAB () { // Add A and B: A + B
         var A_rowLength = document.getElementById('table1').rows.length;
@@ -313,26 +418,39 @@
     }
 
     function multAB () { // Multiply A and B: AB
-        for(var i = 0; i < 9; i++){
-            for(var j = 0; j < 9; j++){
-                var x = document.getElementById('a'+i+j);
-                var y = document.getElementById('b'+i+j);
-                var y1 = document.getElementById('b'+j+i);
+        var A_rowLength = document.getElementById('table1').rows.length;
+        var A_colLength = document.getElementById('table1').rows[0].cells.length;
+        var A = document.getElementById('table1');
+        var B = document.getElementById('table2');
+        var C = document.getElementById('table3');
+        var mA = tableToArray(A); var matrixA = math.matrix(mA);
+        var mB = tableToArray(B); var matrixB = math.matrix(mB);
+
+        var multValue = math.multiply(matrixA, matrixB);
+
+        for(var i = 0; i < A_rowLength; i++){
+            for(var j = 0; j < A_colLength; j++){
                 var z = document.getElementById('c'+i+j);
-                for( var k = 0; k < x.size; k++){
-                    z.innerHTML += parseInt(x.innerHTML) * parseInt(y.innerHTML);
-                }
+                z.innerHTML = multValue.subset(math.index(i, j));
             }
         }
     }
 
     function multBA () { // Multiply B and A: BA
-        for(var i = 0; i < 9; i++){
-            for(var j = 0; j < 9; j++){
-                var x = document.getElementById('a'+i+j);
-                var y = document.getElementById('b'+i+j);
+        var B_rowLength = document.getElementById('table2').rows.length;
+        var B_colLength = document.getElementById('table2').rows[0].cells.length;
+        var A = document.getElementById('table1');
+        var B = document.getElementById('table2');
+        var C = document.getElementById('table3');
+        var mA = tableToArray(A); var matrixA = math.matrix(mA);
+        var mB = tableToArray(B); var matrixB = math.matrix(mB);
+
+        var multValue = math.multiply(matrixB, matrixA);
+        
+        for(var i = 0; i < B_rowLength; i++){
+            for(var j = 0; j < B_colLength; j++){
                 var z = document.getElementById('c'+i+j);
-                z.innerHTML += parseInt(y.innerHTML) - parseInt(x.innerHTML);
+                z.innerHTML = multValue.subset(math.index(i, j));
             }
         }
     }

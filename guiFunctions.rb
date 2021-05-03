@@ -1,16 +1,16 @@
 # button click funciton
-def btn_openMatrix1_click
+def btn_openMatrixA_click
     $matrixAFileName = Tk.getOpenFile
 end
 
-def btn_openMatrix2_click
+def btn_openMatrixB_click
     $matrixBFileName = Tk.getOpenFile
 end
 
 
 # gathering input from csv file functions
 require 'csv'
-def btn_loadMatrix1_click
+def btn_loadMatrixA_click
     row, col = 8, 8
     index = 0
     matrixAtmp = Array.new(row){Array.new(col)}
@@ -21,10 +21,10 @@ def btn_loadMatrix1_click
     $matrixA = matrixAtmp
     $text_MatrixA['state'] = 'normal'
     $text_MatrixA.delete(1.0, 10.40)
-    insert_Matrix1()
+    insert_MatrixA()
 end
 
-def btn_loadMatrix2_click
+def btn_loadMatrixB_click
     row, col = 8, 8
     index = 0
     matrixBtmp = Array.new(row){Array.new(col)}
@@ -35,11 +35,11 @@ def btn_loadMatrix2_click
     $matrixB = matrixBtmp
     $text_MatrixB['state'] = 'normal'
     $text_MatrixB.delete(1.0, 10.40)
-    insert_Matrix2()
+    insert_MatrixB()
 end
 
 # insert Matrix's into their text boxes
-def insert_Matrix1
+def insert_MatrixA
     i = 1
     j = 0
     $matrixA.each do |row|
@@ -58,7 +58,7 @@ def insert_Matrix1
     $text_MatrixA['state'] = 'disabled'
 end
 
-def insert_Matrix2
+def insert_MatrixB
     i = 1
     j = 0
     $matrixB.each do |row|

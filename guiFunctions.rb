@@ -167,3 +167,24 @@ def insert_MatrixB
     end
     $text_MatrixB['state'] = 'disabled'
 end
+
+def insert_MatrixOut
+    $text_MatrixOut['state'] = 'normal'
+    $text_MatrixOut.delete(1.0, 10.40)
+    i = 1
+    j = 0
+    $matrixB.each do |row|
+        row.each do |element|
+            index = i.to_s + "." + j.to_s
+            $text_MatrixOut.insert(index , element)
+            j = j + 4
+            index = i.to_s + "." + j.to_s
+            $text_MatrixOut.insert(index , " ")
+            j = j + 4
+        end
+        index = i.to_s + "." + j.to_s
+        $text_MatrixOut.insert(index, "\n")
+        i = i + 1
+    end
+    $text_MatrixOut['state'] = 'disabled'
+end

@@ -12,12 +12,21 @@ require 'tk'
 # global variables
 $matrixAFileName
 $matrixBFileName
+$row
+$column
 $matrixA            # matrix variables
 $matrixB
-$matrixOut 
+$matrixOut
+$matrixTemp
 $text_MatrixA       # text boxes
 $text_MatrixB
 $text_MatrixOut
+$entry_unaryDetA_Var = TkVariable.new       # entry box variables
+$entry_unaryDetB_Var = TkVariable.new
+$entry_unaryNtimesA_Var = TkVariable.new
+$entry_unaryNtimesB_Var = TkVariable.new
+$entry_unaryPowerA_Var = TkVariable.new
+$entry_unaryPowerB_Var = TkVariable.new
 
 load 'guiElements.rb'
 load 'guiFunctions.rb'

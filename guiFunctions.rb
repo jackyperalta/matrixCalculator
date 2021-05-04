@@ -1,4 +1,4 @@
-# button click funciton
+# button click funcitons
 def btn_openMatrixA_click
     $matrixAFileName = Tk.getOpenFile
 end
@@ -6,7 +6,7 @@ end
 def btn_openMatrixB_click
     $matrixBFileName = Tk.getOpenFile
 end
-
+# start of unary button functions
 def btn_unaryAtoI_click
 
 end
@@ -32,18 +32,64 @@ def btn_unaryInvB_click
 end
 
 def btn_unaryDetA_click
-
+    # gather input from entry box
+    puts $entry_unaryDetA_Var
 end
 
 def btn_unaryDetB_click
-
+    # gather input from entry box
+    puts $entry_unaryDetB_Var
 end
 
 def btn_unaryNtimesA_click
-
+    # gather input from entry box
+    puts $entry_unaryNtimesA_Var
 end
 
 def btn_unaryNtimesB_click
+    # gather input from entry box
+    puts $entry_unaryNtimesB_Var
+end
+
+def btn_unaryPowerA_click
+    # gather input from entry box
+    puts $entry_unaryPowerA_Var
+end
+
+def btn_unaryPowerB_click
+    # gather input from entry box
+    puts $entry_unaryPowerB_Var
+end
+# start of binary function buttons
+def btn_binaryAplusB_click
+
+end
+
+def btn_binaryAminusB_click
+
+end
+
+def btn_binaryBminusA_click
+
+end
+
+def btn_binaryAtimesB_click
+
+end
+
+def btn_binaryBtimesA_click
+
+end
+
+def btn_binaryAcopytoB_click
+
+end
+
+def btn_binaryBcopytoA_click
+
+end
+
+def btn_binaryAswaptoB_click
 
 end
 

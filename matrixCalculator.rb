@@ -14,6 +14,7 @@ $matrixAFileName
 $matrixBFileName
 $matrixA            # matrix variables
 $matrixB
+$matrixOut 
 $text_MatrixA       # text boxes
 $text_MatrixB
 $text_MatrixOut

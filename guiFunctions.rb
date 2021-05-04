@@ -7,6 +7,45 @@ def btn_openMatrixB_click
     $matrixBFileName = Tk.getOpenFile
 end
 
+def btn_unaryAtoI_click
+
+end
+
+def btn_unaryBtoI_click
+
+end
+
+def btn_unaryAT_click
+
+end
+
+def btn_unaryBT_click
+
+end
+
+def btn_unaryInvA_click
+
+end
+
+def btn_unaryInvB_click
+
+end
+
+def btn_unaryDetA_click
+
+end
+
+def btn_unaryDetB_click
+
+end
+
+def btn_unaryNtimesA_click
+
+end
+
+def btn_unaryNtimesB_click
+
+end
 
 # gathering input from csv file functions
 require 'csv'

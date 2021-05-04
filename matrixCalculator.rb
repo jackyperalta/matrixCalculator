@@ -17,7 +17,6 @@ $column
 $matrixA            # matrix variables
 $matrixB
 $matrixOut
-$matrixTemp
 $text_MatrixA       # text boxes
 $text_MatrixB
 $text_MatrixOut

@@ -82,15 +82,21 @@ def btn_binaryBtimesA_click
 end
 
 def btn_binaryAcopytoB_click
-
+    $matrixB = $matrixA
+    insert_MatrixB()
 end
 
 def btn_binaryBcopytoA_click
-
+    $matrixA = $matrixB
+    insert_MatrixA()
 end
 
 def btn_binaryAswaptoB_click
-
+    matrixtmp = $matrixA
+    $matrixA = $matrixB
+    $matrixB = matrixtmp
+    insert_MatrixA()
+    insert_MatrixB()
 end
 
 # gathering input from csv file functions
@@ -104,8 +110,6 @@ def btn_loadMatrixA_click
         index = index + 1
     end
     $matrixA = matrixAtmp
-    $text_MatrixA['state'] = 'normal'
-    $text_MatrixA.delete(1.0, 10.40)
     insert_MatrixA()
 end
 
@@ -118,13 +122,13 @@ def btn_loadMatrixB_click
         index = index + 1
     end
     $matrixB = matrixBtmp
-    $text_MatrixB['state'] = 'normal'
-    $text_MatrixB.delete(1.0, 10.40)
     insert_MatrixB()
 end
 
 # insert Matrix's into their text boxes
 def insert_MatrixA
+    $text_MatrixA['state'] = 'normal'
+    $text_MatrixA.delete(1.0, 10.40)
     i = 1
     j = 0
     $matrixA.each do |row|
@@ -144,6 +148,8 @@ def insert_MatrixA
 end
 
 def insert_MatrixB
+    $text_MatrixB['state'] = 'normal'
+    $text_MatrixB.delete(1.0, 10.40)
     i = 1
     j = 0
     $matrixB.each do |row|

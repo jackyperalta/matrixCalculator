@@ -68,7 +68,7 @@ print "\nMatrix A + Matrix B\n", matrixC
 end
 
 #function subtracts 2 matrices
-def subtract(matrixA, matrixB)
+def subtract(matrixA, matrixB) #A and B must be same size
   #take matrix size and store into row & col
   row, col = $matA_width, $matB_height
   #declare 3rd matrix with size of matrix width and height
@@ -84,7 +84,7 @@ end
 
 
 #fuction for matrix multiplication
-def multiply(matrixA, matrixB)
+def multiply(matrixA, matrixB) #A's columns must equal B's rows
   row, col = $matA_width, $matB_height
       #create a 3rd matrix
       #3rd matrix will have size of matrix A's column
@@ -107,6 +107,36 @@ def multiply(matrixA, matrixB)
   end
   print "\nMatrix A * Matrix B\n", matrixC
 end
+
+
+#Identity matrix function
+def identity(size)  #matrix must be square
+  matrixC = Array.new(size){Array.new(size)}
+  for i in 0..size - 1
+    for j in 0..size - 1
+      if i == j
+        matrixC[i][j] = 1
+      else
+        matrixC[i][j] = 0
+      end
+    end
+  end
+  print "\n\nIdentity matrix: ", matrixC, "\n"
+end
+
+def transpose(matrix, height, width)
+  #declare 3rd matrix with size of matrix width and height
+  matrixC = Array.new(width){Array.new(height)}
+  for i in 0..height-1
+    for j in 0..width-1
+      #arrange the values to resemble transpose
+      #store result in 2D array
+      matrixC[j][i] = matrix[i][j]
+    end
+  end
+  print "\nTranspose of matrix ", matrixC,"\n"
+end
+
 
 
 row, col = 0, 0
@@ -154,20 +184,16 @@ for i in 0..$matA_height - 1
   end
 end
 #TEMPORARY SOLUTION for index [0][0] issue
-matrixA[0][0] = 66
-matrixB[0][0] = 51
+#matrixA[0][0] = 66
+#matrixB[0][0] = 51
 
 #function calls
 add(matrixA, matrixB)
 subtract(matrixA, matrixB)
 multiply(matrixA, matrixB)
+identity($matA_height) #pass a matrix height or width
+transpose(matrixA, $matA_height, $matA_width)
 
 
-#string_num = matrixB[0][0]
-#print "\nstring num: ", string_num
-#num = string_num
-#print "\nnum: ", num
-#print "\n"
-#result = matrixB[0][0] + matrixA[0][0]
 
-#print result
+

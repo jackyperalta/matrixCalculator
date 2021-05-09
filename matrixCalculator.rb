@@ -4,149 +4,177 @@
    # date: 4/24/2021
    # Student 1: Jacqueline Peralta
    # Student 2: Angel Lopez
-   # Student 3:
+   # Student 3: Aldair Martinez
    # description: Implementation of a matrix calculator
 
 require 'tk'
 
 # global variables
-$matrix1FileName
-$matrix2FileName
-$matrixA
+$matrixAFileName
+$matrixBFileName
+$row
+$column
+$matrixA            # matrix variables
 $matrixB
-$text_Matrix1
-$text_Matrix2
+$matrixOut
+$text_MatrixA       # text boxes
+$text_MatrixB
+$text_MatrixOut
+$entry_unaryDetA_Var = TkVariable.new       # entry box variables
+$entry_unaryDetB_Var = TkVariable.new
+$entry_unaryNtimesA_Var = TkVariable.new
+$entry_unaryNtimesB_Var = TkVariable.new
+$entry_unaryPowerA_Var = TkVariable.new
+$entry_unaryPowerB_Var = TkVariable.new
 
-root = TkRoot.new { title "Matrix Calculator" }
-TkLabel.new(root) do
-    text 'Matrix Calculator'
-    pack { padx 15 ; pady 15; side 'left' }
-end
-root.geometry('600x600-5+40')
-
-btn_openMatrix1 = TkButton.new(root) do
-    text " OPEN Matrix1 file "
-    borderwidth 5
-    underline 0
-    state "normal"
-    cursor "hand2"
-    relief "groove"
-    activebackground "blue"
-    command {btn_openMatrix1_click}
-end
-btn_openMatrix2 = TkButton.new(root) do
-    text " OPEN Matrix2 file "
-    borderwidth 5
-    underline 0
-    state "normal"
-    cursor "hand2"
-    relief "groove"
-    activebackground "blue"
-    command {btn_openMatrix2_click}
-end
-btn_loadMatrix1 = TkButton.new(root) do
-    text " LOAD "
-    borderwidth 5
-    underline 0
-    state "normal"
-    cursor "hand2"
-    relief "groove"
-    activebackground "blue"
-    command {btn_loadMatrix1_click}
-end
-btn_loadMatrix2 = TkButton.new(root) do
-    text " LOAD "
-    borderwidth 5
-    underline 0
-    state "normal"
-    cursor "hand2"
-    relief "groove"
-    activebackground "blue"
-    command {btn_loadMatrix2_click}
-end
-
-$text_Matrix1 = TkText.new(root) {width 40; height 10}
-#text_Matrix1['state'] = 'disabled'
-$text_Matrix2 = TkText.new(root) {width 40; height 10}
-#$text_Matrix2['state'] = 'disabled'
-
-# Place widgets in GUI window
-btn_openMatrix1.place('height' => 25, 'width' => 120, 'x' => 20, 'y' => 20)
-btn_openMatrix2.place('height' => 25, 'width' => 120, 'x' => 160, 'y' => 20)
-btn_loadMatrix1.place('height' => 25, 'width' => 120, 'x' => 20, 'y' => 40)
-btn_loadMatrix2.place('height' => 25, 'width' => 120, 'x' => 160, 'y' => 40)
-$text_Matrix1.place('x' => 20, 'y' => 200)
-$text_Matrix2.place('x' => 20, 'y' => 400)
-
-# FUNCTION DECLARATIONS -------
-# button click funciton
-def btn_openMatrix1_click
-    $matrix1FileName = Tk.getOpenFile
-end
-
-def btn_openMatrix2_click
-    $matrix2FileName = Tk.getOpenFile
-end
-
-require 'csv'
-def btn_loadMatrix1_click
-    row, col = 8, 8
-    index = 0
-    matrixAtmp = Array.new(row){Array.new(col)}
-    CSV.foreach($matrix1FileName) do |row|
-        matrixAtmp[index] = row
-        index = index + 1
-    end
-    $matrixA = matrixAtmp
-    insert_Matrix1()
-end
-
-def btn_loadMatrix2_click
-    row, col = 8, 8
-    index = 0
-    matrixBtmp = Array.new(row){Array.new(col)}
-    CSV.foreach($matrix2FileName) do |row|
-        matrixBtmp[index] = row
-        index = index + 1
-    end
-    $matrixB = matrixBtmp
-    insert_Matrix2()
-end
-
-def insert_Matrix1
-    i = 1
-    j = 0
-    $matrixA.each do |row|
-        row.each do |element|
-            index = i.to_s + "." + j.to_s
-            $text_Matrix1.insert(index , element)
-            j = j + 4
-            index = i.to_s + "." + j.to_s
-            $text_Matrix1.insert(index , " ")
-            j = j + 4
-        end
-        index = i.to_s + "." + j.to_s
-        $text_Matrix1.insert(index, "\n")
-        i = i + 1
-    end
-end
-
-def insert_Matrix2
-    i = 1
-    j = 0
-    $matrixB.each do |row|
-        row.each do |element|
-            index = i.to_s + "." + j.to_s
-            $text_Matrix2.insert(index , element)
-            j = j + 4
-            index = i.to_s + "." + j.to_s
-            $text_Matrix2.insert(index , " ")
-            j = j + 4
-        end
-        index = i.to_s + "." + j.to_s
-        $text_Matrix2.insert(index, "\n")
-        i = i + 1
-    end
-end
+load 'guiElements.rb'
+load 'guiFunctions.rb'
 
 Tk.mainloop
+
+
+#Code for storing csv to array/matrix
+require 'csv'
+
+
+#function adds 2 matrices
+def add(matrixA, matrixB)
+  #take matrix size and store into row & col
+  row, col = $matA_width, $matB_height
+  #declare 3rd matrix with size of matrix width and height
+  matrixC = Array.new(row){Array.new(col)}
+  for i in 0..col-1
+    for j in 0..row-1
+      #add and store into 3rd matrix
+      matrixC[i][j] = matrixA[i][j] + matrixB[i][j]
+    end
+  end
+print "\nMatrix A + Matrix B\n", matrixC
+end
+
+#function subtracts 2 matrices
+def subtract(matrixA, matrixB) #A and B must be same size
+  #take matrix size and store into row & col
+  row, col = $matA_width, $matB_height
+  #declare 3rd matrix with size of matrix width and height
+  matrixC = Array.new(row){Array.new(col)}
+  for i in 0..col-1
+    for j in 0..row-1
+      #subtract and store into 3rd matrix
+      matrixC[i][j] = matrixA[i][j] - matrixB[i][j]
+    end
+  end
+print "\nMatrix A - Matrix B\n", matrixC
+end
+
+
+#fuction for matrix multiplication
+def multiply(matrixA, matrixB) #A's columns must equal B's rows
+  row, col = $matA_width, $matB_height
+      #create a 3rd matrix
+      #3rd matrix will have size of matrix A's column
+      # and matrix B's row.
+  matrixC = Array.new(matrixA.length){Array.new(matrixB[0].length)}
+
+  for i in 0..col - 1
+    for j in 0..row - 1
+      matrixC[i][j] = 0  #set all to 0 initially
+    end
+  end
+
+  for i in 0..matrixC.length - 1
+    for j in 0..matrixC[0].length - 1
+      for k in 0..matrixA[0].length - 1
+        #multiplication of matrices is added to 3rd matrix
+        matrixC[i][j] += matrixA[i][k] * matrixB[k][j]
+      end
+    end
+  end
+  print "\nMatrix A * Matrix B\n", matrixC
+end
+
+
+#Identity matrix function
+def identity(size)  #matrix must be square
+  matrixC = Array.new(size){Array.new(size)}
+  for i in 0..size - 1
+    for j in 0..size - 1
+      if i == j
+        matrixC[i][j] = 1
+      else
+        matrixC[i][j] = 0
+      end
+    end
+  end
+  print "\n\nIdentity matrix: ", matrixC, "\n"
+end
+
+def transpose(matrix, height, width)
+  #declare 3rd matrix with size of matrix width and height
+  matrixC = Array.new(width){Array.new(height)}
+  for i in 0..height-1
+    for j in 0..width-1
+      #arrange the values to resemble transpose
+      #store result in 2D array
+      matrixC[j][i] = matrix[i][j]
+    end
+  end
+  print "\nTranspose of matrix ", matrixC,"\n"
+end
+
+
+
+row, col = 0, 0
+index = 0
+
+#create matrix
+matrixA = Array.new(row){Array.new(col)}
+
+puts "Matrix A\n"
+#read in matrix A file
+CSV.foreach("A.csv") do |row|
+  matrixA[index] = row
+  index = index + 1
+  #print "Index: ", index, "  row: ", row, "\n"
+end
+print matrixA
+
+#store height and width of matrix A
+$matA_height = matrixA.length  #array.length gets you height
+$matA_width = matrixA[0].length #array[0].length gets you width
+print "\nMatrix A has a size of ", $matA_height, "x", $matA_width, "\n"
+
+
+index = 0
+puts "\n\nMatrix B\n"
+#read in matrix B file
+matrixB = Array.new(row){Array.new(col)}
+  CSV.foreach("B.csv") do |row|
+    matrixB[index] = row
+    index = index + 1
+  end
+print matrixB
+
+#store height and width of matrix B
+$matB_height = matrixB.length
+$matB_width = matrixB[0].length
+print "\nMatrix B has a size of ", $matB_height, "x", $matB_width, "\n"
+
+print "\n\n"
+#convert strings to ints
+for i in 0..$matA_height - 1
+  for j in 0..$matA_width - 1
+    matrixA[i][j] = matrixA[i][j].to_i
+    matrixB[i][j] = matrixB[i][j].to_i
+  end
+end
+#TEMPORARY SOLUTION for index [0][0] issue
+#matrixA[0][0] = 66
+#matrixB[0][0] = 51
+
+#function calls
+add(matrixA, matrixB)
+subtract(matrixA, matrixB)
+multiply(matrixA, matrixB)
+identity($matA_height) #pass a matrix height or width
+transpose(matrixA, $matA_height, $matA_width)

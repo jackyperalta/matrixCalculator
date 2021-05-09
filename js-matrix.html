@@ -84,8 +84,9 @@ This program works best with Chrome. -->
             <td><input type="button" value="Swap A to B" onClick="swap()"></td>
         </tr>
     </table>
-    <!-- https://www.w3schools.com/js/js_htmldom.asp#:~:text=The%20DOM%20is%20a%20W3C,and%20style%20of%20a%20document.%22 -->
     <script type="text/javascript">
+    var A_rowLength, A_colLength, B_rowLength, B_colLength, table1, table2; // declaring global variables
+
     function LoadA() {
         var fileUpload = document.getElementById("fileUpload");
         var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/; // Validate file extension before upload
@@ -110,6 +111,10 @@ This program works best with Chrome. -->
                     var aCSV = document.getElementById("aCSV");
                     aCSV.innerHTML = "";
                     aCSV.appendChild(table);
+                    // defining global variables 
+                    A_rowLength = document.getElementById('table1').rows.length;
+                    A_colLength = document.getElementById('table1').rows[0].cells.length;
+                    table1 = document.getElementById('table1');
                 }
                 reader.readAsText(fileUpload.files[0]);
             } else {
@@ -145,6 +150,9 @@ This program works best with Chrome. -->
                     var bCSV = document.getElementById("bCSV");
                     bCSV.innerHTML = "";
                     bCSV.appendChild(table);
+                    B_rowLength = document.getElementById('table2').rows.length;
+                    B_colLength = document.getElementById('table2').rows[0].cells.length;
+                    table2 = document.getElementById('table2');
                 }
                 reader.readAsText(fileUpload.files[0]);
             } else {
@@ -193,9 +201,7 @@ This program works best with Chrome. -->
     /* UNARY OPS */
     function idA () { // Make A and square indentity matrix up to 10x10: A to I
         document.getElementById('answerBox').value = "";
-        var A_rowLength = document.getElementById('table1').rows.length;
-        var A_colLength = document.getElementById('table1').rows[0].cells.length;
-        if(window.A_rowLength == window.A_colLength) {
+        if(A_rowLength == A_colLength) {
             for(var i = 0; i < A_rowLength; i++){
                 for(var j = 0; j < A_colLength; j++){
                     var x = document.getElementById('a'+i+j);
@@ -213,8 +219,6 @@ This program works best with Chrome. -->
 
     function idB () { // Make B and square indentity matrix up to 10x10: B to I
         document.getElementById('answerBox').value = "";
-        var B_rowLength = document.getElementById('table2').rows.length;
-        var B_colLength = document.getElementById('table2').rows[0].cells.length;
         if(B_rowLength == B_colLength) {
             for(var i = 0; i < B_rowLength; i++){
                 for(var j = 0; j < B_colLength; j++){
@@ -233,8 +237,6 @@ This program works best with Chrome. -->
 
     function nxA () { // Scalar n times A: nA where n is an integer
         document.getElementById('answerBox').value = "";
-        var A_rowLength = document.getElementById('table1').rows.length;
-        var A_colLength = document.getElementById('table1').rows[0].cells.length;
         var detectLetter = /^[A-Za-z]+$/;
         for(var i = 0; i < A_rowLength; i++){
             for(var j = 0; j < A_colLength; j++){
@@ -248,8 +250,6 @@ This program works best with Chrome. -->
 
     function nxB () { // Scalar n times B: nA where n is an integer
         document.getElementById('answerBox').value = "";
-        var B_rowLength = document.getElementById('table2').rows.length;
-        var B_colLength = document.getElementById('table2').rows[0].cells.length;
         var detectLetter = /^[A-Za-z]+$/;
         for(var i = 0; i < B_rowLength; i++){
             for(var j = 0; j < B_colLength; j++){
@@ -263,11 +263,7 @@ This program works best with Chrome. -->
 
     function transA () { // A Transpose: A^T
         document.getElementById('answerBox').value = "";
-        var A_rowLength = document.getElementById('table1').rows.length;
-        var A_colLength = document.getElementById('table1').rows[0].cells.length;
-        var table = document.getElementById('table1');
-        var array = tableToArray(table); var mA = math.matrix(array);
-        var trValue = math.transpose(mA);
+        var array = tableToArray(table1), mA = math.matrix(array), trValue = math.transpose(mA);
         for(var i = 0; i < A_rowLength; i++){
             for(var j = 0; j < A_colLength; j++){
                 var z = document.getElementById('c'+i+j);
@@ -279,11 +275,7 @@ This program works best with Chrome. -->
 
     function transB () { // B Transpose: B^T 
         document.getElementById('answerBox').value = "";
-        var B_rowLength = document.getElementById('table2').rows.length;
-        var B_colLength = document.getElementById('table2').rows[0].cells.length;
-        var table = document.getElementById('table2');
-        var array = tableToArray(table); var mB = math.matrix(array);
-        var trValue = math.transpose(mB);
+        var array = tableToArray(table2), mB = math.matrix(array), trValue = math.transpose(mB);
         for(var i = 0; i < B_rowLength; i++){
             for(var j = 0; j < B_colLength; j++){
                 var z = document.getElementById('c'+i+j);
@@ -294,14 +286,7 @@ This program works best with Chrome. -->
     }
 
     function detA () { // Determinant of A: det(A)
-        var A_rowLength = document.getElementById('table1').rows.length;
-        var A_colLength = document.getElementById('table1').rows[0].cells.length;
-
-        var table = document.getElementById('table1');
-        var ansTxt = document.getElementById('answerBox');
-
-        var matrix = tableToArray(table);
-
+        var ansTxt = document.getElementById('answerBox'), matrix = tableToArray(table1);
         try{
             if (A_rowLength == A_colLength){
                 var detValue = math.det(matrix); console.log(detValue);
@@ -315,12 +300,7 @@ This program works best with Chrome. -->
     }
 
     function detB () { // Determinant of B: det(B)
-        var B_rowLength = document.getElementById('table2').rows.length;
-        var B_colLength = document.getElementById('table2').rows[0].cells.length;
-        var table = document.getElementById('table2');
-        var ansTxt = document.getElementById('answerBox');
-
-        var matrix = tableToArray(table);
+        var ansTxt = document.getElementById('answerBox'), matrix = tableToArray(table2);
         try {
             if (B_rowLength == B_colLength){
                 var detValue = math.det(matrix); console.log(detValue);
@@ -335,14 +315,9 @@ This program works best with Chrome. -->
 
     function invA () { // Inverse of A: A^-1 
         document.getElementById('answerBox').value = "";
-        var A_rowLength = document.getElementById('table1').rows.length;
-        var A_colLength = document.getElementById('table1').rows[0].cells.length;
-        var table = document.getElementById('table1');
-
         try {
             if (A_rowLength == A_colLength){
-                var array = tableToArray(table); var mA = math.matrix(array);
-                var invValue = math.inv(mA);
+                var array = tableToArray(table1), mA = math.matrix(array), invValue = math.inv(mA);
                 for(var i = 0; i < A_rowLength; i++){
                     for(var j = 0; j < A_colLength; j++){
                         var z = document.getElementById('c'+i+j);
@@ -360,14 +335,9 @@ This program works best with Chrome. -->
 
     function invB () { // Inverse of B: B^-1 
         document.getElementById('answerBox').value = "";
-        var B_rowLength = document.getElementById('table2').rows.length;
-        var B_colLength = document.getElementById('table2').rows[0].cells.length;
-        var table = document.getElementById('table2');
-
         try{
             if(B_rowLength == B_colLength){
-                var array = tableToArray(table); var mB = math.matrix(array);
-                var invValue = math.inv(mB);
+                var array = tableToArray(table2), mB = math.matrix(array), invValue = math.inv(mB);
                 for(var i = 0; i < B_rowLength; i++){
                     for(var j = 0; j < B_colLength; j++){
                         var z = document.getElementById('c'+i+j);
@@ -385,11 +355,7 @@ This program works best with Chrome. -->
 
     function ApowerN () { // Integer power of A when A is a square matrix: A^n for 1 ≤ n ≤ 10
         document.getElementById('answerBox').value = "";
-        var A_rowLength = document.getElementById('table1').rows.length;
-        var A_colLength = document.getElementById('table1').rows[0].cells.length;
-        var table = document.getElementById('table1');
-        var array = tableToArray(table); var mA = math.matrix(array);
-        var n = document.getElementById('n');
+        var array = tableToArray(table1), mA = math.matrix(array), n = document.getElementById('n');
         try{
             if(A_rowLength == A_colLength){
                 var ApowN = math.pow(mA, n.value);
@@ -410,11 +376,7 @@ This program works best with Chrome. -->
 
     function BpowerN () { // Integer power of B when B is a square matrix: B^n for 1 ≤ n ≤ 10
         document.getElementById('answerBox').value = "";
-        var B_rowLength = document.getElementById('table2').rows.length;
-        var B_colLength = document.getElementById('table2').rows[0].cells.length;
-        var table = document.getElementById('table2');
-        var array = tableToArray(table); var mB = math.matrix(array);
-        var n = document.getElementById('n');
+        var array = tableToArray(table2), mB = math.matrix(array), n = document.getElementById('n');
         try{
             if(B_rowLength == B_colLength){
                 var BpowN = math.pow(mB, n.value);
@@ -436,11 +398,6 @@ This program works best with Chrome. -->
     /* BINARY OPS */
     function addAB () { // Add A and B: A + B
         document.getElementById('answerBox').value = "";
-        var A_rowLength = document.getElementById('table1').rows.length;
-        var A_colLength = document.getElementById('table1').rows[0].cells.length;
-        var B_rowLength = document.getElementById('table2').rows.length;
-        var B_colLength = document.getElementById('table2').rows[0].cells.length;
-        
         if(A_rowLength == B_rowLength && A_colLength == B_colLength){
             for(var i = 0; i < A_rowLength; i++){ // make sure their the same dimension
                 for(var j = 0; j < B_colLength; j++){
@@ -457,10 +414,6 @@ This program works best with Chrome. -->
 
     function subAB () { // Substract B from A: A - B
         document.getElementById('answerBox').value = "";
-        var A_rowLength = document.getElementById('table1').rows.length;
-        var A_colLength = document.getElementById('table1').rows[0].cells.length;
-        var B_rowLength = document.getElementById('table2').rows.length;
-        var B_colLength = document.getElementById('table2').rows[0].cells.length;
         if(A_rowLength == B_rowLength && A_colLength == B_colLength){
             for(var i = 0; i < A_rowLength; i++){ // make sure their the same dimension
                 for(var j = 0; j < B_colLength; j++){
@@ -477,10 +430,6 @@ This program works best with Chrome. -->
 
     function subBA () { // Substract A from B: B - A
         document.getElementById('answerBox').value = "";
-        var A_rowLength = document.getElementById('table1').rows.length;
-        var A_colLength = document.getElementById('table1').rows[0].cells.length;
-        var B_rowLength = document.getElementById('table2').rows.length;
-        var B_colLength = document.getElementById('table2').rows[0].cells.length;
         if(A_rowLength == B_rowLength && A_colLength == B_colLength){
             for(var i = 0; i < A_rowLength; i++){ // make sure their the same dimension
                 for(var j = 0; j < B_colLength; j++){
@@ -497,14 +446,8 @@ This program works best with Chrome. -->
 
     function multAB () { // Multiply A and B: AB
         document.getElementById('answerBox').value = "";
-        var A_rowLength = document.getElementById('table1').rows.length;
-        var A_colLength = document.getElementById('table1').rows[0].cells.length;
-        var B_rowLength = document.getElementById('table2').rows.length;
-        var A = document.getElementById('table1');
-        var B = document.getElementById('table2');
-        var C = document.getElementById('table3');
-        var mA = tableToArray(A); var matrixA = math.matrix(mA);
-        var mB = tableToArray(B); var matrixB = math.matrix(mB);
+        var mA = tableToArray(table1), matrixA = math.matrix(mA);
+        var mB = tableToArray(table2), matrixB = math.matrix(mB);
 
         try{
             if(A_colLength == B_rowLength){
@@ -525,14 +468,8 @@ This program works best with Chrome. -->
 
     function multBA () { // Multiply B and A: BA
         document.getElementById('answerBox').value = "";
-        var B_rowLength = document.getElementById('table2').rows.length;
-        var B_colLength = document.getElementById('table2').rows[0].cells.length;
-        var A_rowLength = document.getElementById('table1').rows.length;
-        var A = document.getElementById('table1');
-        var B = document.getElementById('table2');
-        var C = document.getElementById('table3');
-        var mA = tableToArray(A); var matrixA = math.matrix(mA);
-        var mB = tableToArray(B); var matrixB = math.matrix(mB);
+        var mA = tableToArray(table1), matrixA = math.matrix(mA);
+        var mB = tableToArray(table2), matrixB = math.matrix(mB);
         try {
             if(B_colLength == A_rowLength){
                 var multValue = math.multiply(matrixB, matrixA);
@@ -552,22 +489,16 @@ This program works best with Chrome. -->
 
     function copyAB () { // copy A into B: A to B
         document.getElementById('answerBox').value = "";
-        var table1 = document.getElementById('table1');
-        var table2 = document.getElementById('table2');
         table2.innerHTML = table1.innerHTML;
     }
 
     function copyBA () { // copy B into A: B to A
         document.getElementById('answerBox').value = "";
-        var table1 = document.getElementById('table1');
-        var table2 = document.getElementById('table2');
         table1.innerHTML = table2.innerHTML;
     }
 
     function swap () { // Swap A and B: A to B
         document.getElementById('answerBox').value = "";
-        var table1 = document.getElementById('table1');
-        var table2 = document.getElementById('table2');
         var z = table1.innerHTML;
         table1.innerHTML = table2.innerHTML;
         table2.innerHTML = z;

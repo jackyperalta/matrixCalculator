@@ -241,10 +241,10 @@ def insert_MatrixA (matrix)
         row.each do |element|
             index = i.to_s + "." + j.to_s
             $text_MatrixA.insert(index , element)
-            j = j + 4
+            j = j + 10
             index = i.to_s + "." + j.to_s
             $text_MatrixA.insert(index , ",")
-            j = j + 4
+            j = j + 10
         end
         index = i.to_s + "." + j.to_s
         $text_MatrixA.insert(index, "\n")
@@ -262,10 +262,10 @@ def insert_MatrixB (matrix)
         row.each do |element|
             index = i.to_s + "." + j.to_s
             $text_MatrixB.insert(index , element)
-            j = j + 4
+            j = j + 10
             index = i.to_s + "." + j.to_s
             $text_MatrixB.insert(index , ",")
-            j = j + 4
+            j = j + 10
         end
         index = i.to_s + "." + j.to_s
         $text_MatrixB.insert(index, "\n")
@@ -287,10 +287,10 @@ def insert_MatrixOut (matrix)
             row.each do |element|
                 index = i.to_s + "." + j.to_s
                 $text_MatrixOut.insert(index , element)
-                j = j + 4
+                j = j + 10
                 index = i.to_s + "." + j.to_s
                 $text_MatrixOut.insert(index , ",")
-                j = j + 4
+                j = j + 10
             end
             index = i.to_s + "." + j.to_s
             $text_MatrixOut.insert(index, "\n")
@@ -348,7 +348,7 @@ def scaler(matrix, mat_height, mat_width, input)
       matrixC[i][j] = matrix[i][j] * input
     end
   end
-  print "\nMatrix index * #{input}\n", matrixC
+  #print "\nMatrix index * #{input}\n", matrixC
   return matrixC
 end
 
@@ -377,8 +377,8 @@ def add(matrixA, matrixB, row, col)
       matrixC[i][j] = matrixA[i][j].to_i + matrixB[i][j].to_i
     end
   end
-print "\nMatrix A + Matrix B\n", matrixC
-return matrixC
+  #print "\nMatrix A + Matrix B\n", matrixC
+  return matrixC
 end
 
 #function subtracts 2 matrices
@@ -392,8 +392,8 @@ def subtract(matrixA, matrixB, row, col) #A and B must be same size
       matrixC[i][j] = matrixA[i][j].to_i - matrixB[i][j].to_i
     end
   end
-print "\nMatrix A - Matrix B\n", matrixC
-return matrixC
+  #print "\nMatrix A - Matrix B\n", matrixC
+  return matrixC
 end
 
 #fuction for matrix multiplication
@@ -418,7 +418,7 @@ def multiply(matrixA, matrixB, row, col) #A's columns must equal B's rows
       end
     end
   end
-  print "\nMatrix A * Matrix B\n", matrixC
+  #print "\nMatrix A * Matrix B\n", matrixC
   return matrixC
 end
 
@@ -434,7 +434,7 @@ def identity(size)  #matrix must be square
       end
     end
   end
-  print "\n\nIdentity matrix: ", matrixC, "\n"
+  #print "\n\nIdentity matrix: ", matrixC, "\n"
   return matrixC
 end
 
@@ -448,6 +448,6 @@ def transpose(matrix, height, width)
       matrixC[j][i] = matrix[i][j]
     end
   end
-  print "\nTranspose of matrix ", matrixC,"\n"
+  #print "\nTranspose of matrix ", matrixC,"\n"
   return matrixC
 end

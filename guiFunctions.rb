@@ -8,23 +8,50 @@ def btn_openMatrixB_click
 end
 # start of unary button functions
 def btn_unaryAtoI_click
-
+    row = findRow($matrixA)
+    col = findCol($matrixA)
+    if (row == col)
+        matrix = identity(row)
+        insert_MatrixOut(matrix)
+    end
 end
 
 def btn_unaryBtoI_click
-
+    row = findRow($matrixB)
+    col = findCol($matrixB)
+    if (row == col)
+        matrix = identity(row)
+        insert_MatrixOut(matrix)
+    end
 end
 
 def btn_unaryAT_click
-
+    row = findRow($matrixA)
+    col = findCol($matrixA)
+    matrix = transpose($matrixA, row, col)
+    insert_MatrixOut(matrix)
 end
 
 def btn_unaryBT_click
-
+    row = findRow($matrixB)
+    col = findCol($matrixB)
+    matrix = transpose($matrixB, row, col)
+    insert_MatrixOut(matrix)
 end
 
+require "matrix" #crucial for matrix operations to work
 def btn_unaryInvA_click
-
+    col = findCol($matrixA)
+    row = findRow($matrixA)
+    if (col == row) # inverse must be a square
+        matrixA = convertMatrixToInteger($matrixA)
+        matrixtmp = Matrix[*matrixA]
+        matrix = matrixtmp.inverse()
+        matrix = *matrix
+        # ERROR: prints but this breaks it idk why
+        matrix = to_Decimal(matrix, findRow(matrix), findCol(matrix))
+        insert_MatrixOut(matrix)
+    end
 end
 
 def btn_unaryInvB_click
@@ -32,18 +59,41 @@ def btn_unaryInvB_click
 end
 
 def btn_unaryDetA_click
-    # gather input from entry box
-    puts $entry_unaryDetA_Var
+    col = findCol($matrixA)
+    row = findRow($matrixA)
+    if (col == row) # must be a square
+        matrixA = convertMatrixToInteger($matrixA)
+    end
+    matrixtmp = Matrix[*matrixA]
+    matrix = matrixtmp.determinant()
+    insert_MatrixOut(matrix)
 end
 
 def btn_unaryDetB_click
-    # gather input from entry box
-    puts $entry_unaryDetB_Var
+    col = findCol($matrixB)
+    row = findRow($matrixB)
+    if (col == row) # must be a square
+        matrixB = convertMatrixToInteger($matrixB)
+    end
+    matrixtmp = Matrix[*matrixB]
+    matrix = matrixtmp.determinant()
+    insert_MatrixOut(matrix)
 end
 
 def btn_unaryNtimesA_click
     # gather input from entry box
-    puts $entry_unaryNtimesA_Var
+    n = $entry_unaryNtimesA_Var
+    puts n
+    col = findCol($matrixA)
+    row = findRow($matrixA)
+    if (col == row) # must be a square
+        matrixA = convertMatrixToInteger($matrixA)
+    end
+    matrixtmp = Matrix[*matrixA]
+    puts matrixtmp
+    # ERROR: this also breaks, says cant find exponent()
+    matrix = exponent(matrixtmp, n)
+    insert_MatrixOut(matrix)
 end
 
 def btn_unaryNtimesB_click
@@ -60,7 +110,7 @@ def btn_unaryPowerB_click
     # gather input from entry box
     puts $entry_unaryPowerB_Var
 end
-# start of binary function buttons
+# --start of binary function buttons--
 def btn_binaryAplusB_click
     rowA = findRow($matrixA)
     colA = findCol($matrixA)
@@ -107,7 +157,7 @@ end
 def btn_binaryBtimesA_click
     colB = findCol($matrixB)
     rowA = findRow($matrixA)
-    matrixC = multiply($matrixA, $matrixB, rowA, colB)
+    matrixC = multiply($matrixB, $matrixA, rowA, colB)
     insert_MatrixOut(matrixC)
 end
 
@@ -199,18 +249,23 @@ def insert_MatrixOut (matrix)
     $text_MatrixOut.delete(1.0, 10.40)
     i = 1
     j = 0
-    matrix.each do |row|
-        row.each do |element|
-            index = i.to_s + "." + j.to_s
-            $text_MatrixOut.insert(index , element)
-            j = j + 4
-            index = i.to_s + "." + j.to_s
-            $text_MatrixOut.insert(index , ",")
-            j = j + 4
-        end
+    if (matrix.is_a? Integer)
         index = i.to_s + "." + j.to_s
-        $text_MatrixOut.insert(index, "\n")
-        i = i + 1
+        $text_MatrixOut.insert(index , matrix)
+    else
+        matrix.each do |row|
+            row.each do |element|
+                index = i.to_s + "." + j.to_s
+                $text_MatrixOut.insert(index , element)
+                j = j + 4
+                index = i.to_s + "." + j.to_s
+                $text_MatrixOut.insert(index , ",")
+                j = j + 4
+            end
+            index = i.to_s + "." + j.to_s
+            $text_MatrixOut.insert(index, "\n")
+            i = i + 1
+        end
     end
     $text_MatrixOut['state'] = 'disabled'
 end
@@ -233,6 +288,18 @@ def findCol(matrix_input)
         end
         return colCount
     end
+end
+
+def convertMatrixToInteger(matrix)
+    col = findCol(matrix)
+    row = findRow(matrix)
+    matrixNew = Array.new(row){Array.new(col)}
+    for i in 0..col-1
+        for j in 0..row-1
+            matrixNew[i][j] = matrix[i][j].to_i
+        end
+    end
+    return matrixNew
 end
 
 #function adds 2 matrices
@@ -304,6 +371,7 @@ def identity(size)  #matrix must be square
     end
   end
   print "\n\nIdentity matrix: ", matrixC, "\n"
+  return matrixC
 end
 
 def transpose(matrix, height, width)
@@ -317,4 +385,5 @@ def transpose(matrix, height, width)
     end
   end
   print "\nTranspose of matrix ", matrixC,"\n"
+  return matrixC
 end

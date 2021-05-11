@@ -49,7 +49,7 @@ def btn_unaryInvA_click
         matrix = matrixtmp.inverse()
         matrix = *matrix
         # ERROR: prints but this breaks it idk why
-        #matrix = to_Decimal(matrix, findRow(matrix), findCol(matrix))
+        matrix = to_Decimal(matrix, findRow(matrix), findCol(matrix))
         insert_MatrixOut(matrix)
     end
 end
@@ -157,7 +157,7 @@ end
 def btn_binaryBtimesA_click
     colB = findCol($matrixB)
     rowA = findRow($matrixA)
-    matrixC = multiply($matrixA, $matrixB, rowA, colB)
+    matrixC = multiply($matrixB, $matrixA, rowA, colB)
     insert_MatrixOut(matrixC)
 end
 

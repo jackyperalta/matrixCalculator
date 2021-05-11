@@ -3,7 +3,7 @@ TkLabel.new(root) do
     text 'Matrix Calculator'
     pack { padx 15 ; pady 15; side 'left' }
 end
-root.geometry('700x700-5+40')
+root.geometry('1010x700-5+40')
 
 # Open file buttons
 btn_openMatrixA = TkButton.new(root) do
@@ -242,9 +242,9 @@ entry_unaryPowerA = TkEntry.new(root) { textvariable $entry_unaryPowerA_Var }
 entry_unaryPowerB = TkEntry.new(root) { textvariable $entry_unaryPowerB_Var }
 
 # Text boxes
-$text_MatrixA = TkText.new(root) {width 40; height 15; state 'disabled'}
-$text_MatrixB = TkText.new(root) {width 40; height 15; state 'disabled'}
-$text_MatrixOut = TkText.new(root) {width 40; height 15; state 'disabled'}
+$text_MatrixA = TkText.new(root) {width 60; height 15; state 'disabled'}
+$text_MatrixB = TkText.new(root) {width 60; height 15; state 'disabled'}
+$text_MatrixOut = TkText.new(root) {width 60; height 15; state 'disabled'}
 
 # Labels
 label_Output = TkLabel.new(root) {width 10; height 1; text 'OUTPUT'; borderwidth 0; relief 'groove'}
@@ -256,14 +256,14 @@ label_Binary = TkLabel.new(root) {width 20; height 1; text 'Binary Operations'; 
 btn_openMatrixA.place('height' => 25, 'width' => 120, 'x' => 20, 'y' => 20)
 btn_loadMatrixA.place('height' => 25, 'width' => 120, 'x' => 20, 'y' => 40)
 $text_MatrixA.place('x' => 20, 'y' => 70)
-btn_openMatrixB.place('height' => 25, 'width' => 120, 'x' => 350, 'y' => 20)
-btn_loadMatrixB.place('height' => 25, 'width' => 120, 'x' => 350, 'y' => 40)
-$text_MatrixB.place('x' => 350, 'y' => 70)
+btn_openMatrixB.place('height' => 25, 'width' => 120, 'x' => 510, 'y' => 20)
+btn_loadMatrixB.place('height' => 25, 'width' => 120, 'x' => 510, 'y' => 40)
+$text_MatrixB.place('x' => 510, 'y' => 70)
 $text_MatrixOut.place('x' => 20, 'y' => 350)
 label_Output.place('x' => 20, 'y' => 325)
 
 # unary operation widgets
-x = 350
+x = 520
 y = 340
 label_Unary.place('x' => x, 'y' => y)
 btn_unaryAtoI.place('height' => 25, 'width' => 40, 'x' => x, 'y' => y+30)
@@ -286,14 +286,14 @@ btn_unaryPowerB.place('height' => 25, 'width' => 60, 'x' => x+100, 'y' => y+120)
 entry_unaryPowerB.place('height' => 25, 'width' => 40, 'x' => x+155, 'y' => y+120)
 
 # binary operation widgets
-x = 350
+x = 520
 y = 500
 label_Binary.place('x' => x, 'y' => y)
 btn_binaryAplusB.place('height' => 25, 'width' => 40, 'x' => x, 'y' => y+30)
 btn_binaryAminusB.place('height' => 25, 'width' => 40, 'x' => x+40, 'y' => y+30)
-btn_binaryBminusA.place('height' => 25, 'width' => 40, 'x' => 430, 'y' => y+30)
-btn_binaryAtimesB.place('height' => 25, 'width' => 40, 'x' => 470, 'y' => y+30)
-btn_binaryBtimesA.place('height' => 25, 'width' => 40, 'x' => 510, 'y' => y+30)
-btn_binaryAcopytoB.place('height' => 25, 'width' => 80, 'x' => 350, 'y' => y+60)
-btn_binaryBcopytoA.place('height' => 25, 'width' => 80, 'x' => 430, 'y' => y+60)
-btn_binaryAswaptoB.place('height' => 25, 'width' => 80, 'x' => 510, 'y' => y+60)
+btn_binaryBminusA.place('height' => 25, 'width' => 40, 'x' => x+80, 'y' => y+30)
+btn_binaryAtimesB.place('height' => 25, 'width' => 40, 'x' => x+120, 'y' => y+30)
+btn_binaryBtimesA.place('height' => 25, 'width' => 40, 'x' => x+160, 'y' => y+30)
+btn_binaryAcopytoB.place('height' => 25, 'width' => 80, 'x' => x, 'y' => y+60)
+btn_binaryBcopytoA.place('height' => 25, 'width' => 80, 'x' => x+80, 'y' => y+60)
+btn_binaryAswaptoB.place('height' => 25, 'width' => 80, 'x' => x+160, 'y' => y+60)

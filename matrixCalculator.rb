@@ -36,94 +36,6 @@ Tk.mainloop
 #Code for storing csv to array/matrix
 require 'csv'
 
-
-#function adds 2 matrices
-def add(matrixA, matrixB)
-  #take matrix size and store into row & col
-  row, col = $matA_width, $matB_height
-  #declare 3rd matrix with size of matrix width and height
-  matrixC = Array.new(row){Array.new(col)}
-  for i in 0..col-1
-    for j in 0..row-1
-      #add and store into 3rd matrix
-      matrixC[i][j] = matrixA[i][j] + matrixB[i][j]
-    end
-  end
-print "\nMatrix A + Matrix B\n", matrixC
-end
-
-#function subtracts 2 matrices
-def subtract(matrixA, matrixB) #A and B must be same size
-  #take matrix size and store into row & col
-  row, col = $matA_width, $matB_height
-  #declare 3rd matrix with size of matrix width and height
-  matrixC = Array.new(row){Array.new(col)}
-  for i in 0..col-1
-    for j in 0..row-1
-      #subtract and store into 3rd matrix
-      matrixC[i][j] = matrixA[i][j] - matrixB[i][j]
-    end
-  end
-print "\nMatrix A - Matrix B\n", matrixC
-end
-
-
-#fuction for matrix multiplication
-def multiply(matrixA, matrixB) #A's columns must equal B's rows
-  row, col = $matA_width, $matB_height
-      #create a 3rd matrix
-      #3rd matrix will have size of matrix A's column
-      # and matrix B's row.
-  matrixC = Array.new(matrixA.length){Array.new(matrixB[0].length)}
-
-  for i in 0..col - 1
-    for j in 0..row - 1
-      matrixC[i][j] = 0  #set all to 0 initially
-    end
-  end
-
-  for i in 0..matrixC.length - 1
-    for j in 0..matrixC[0].length - 1
-      for k in 0..matrixA[0].length - 1
-        #multiplication of matrices is added to 3rd matrix
-        matrixC[i][j] += matrixA[i][k] * matrixB[k][j]
-      end
-    end
-  end
-  print "\nMatrix A * Matrix B\n", matrixC
-end
-
-
-#Identity matrix function
-def identity(size)  #matrix must be square
-  matrixC = Array.new(size){Array.new(size)}
-  for i in 0..size - 1
-    for j in 0..size - 1
-      if i == j
-        matrixC[i][j] = 1
-      else
-        matrixC[i][j] = 0
-      end
-    end
-  end
-  print "\n\nIdentity matrix: ", matrixC, "\n"
-end
-
-def transpose(matrix, height, width)
-  #declare 3rd matrix with size of matrix width and height
-  matrixC = Array.new(width){Array.new(height)}
-  for i in 0..height-1
-    for j in 0..width-1
-      #arrange the values to resemble transpose
-      #store result in 2D array
-      matrixC[j][i] = matrix[i][j]
-    end
-  end
-  print "\nTranspose of matrix ", matrixC,"\n"
-end
-
-
-
 row, col = 0, 0
 index = 0
 
@@ -172,9 +84,60 @@ end
 #matrixA[0][0] = 66
 #matrixB[0][0] = 51
 
-#function calls
-add(matrixA, matrixB)
-subtract(matrixA, matrixB)
-multiply(matrixA, matrixB)
-identity($matA_height) #pass a matrix height or width
-transpose(matrixA, $matA_height, $matA_width)
+#function calls_______________________________________________________________
+#add(matrixA, matrixB)
+#subtract(matrixA, matrixB)
+#multiply(matrixA, $matA_height, $matA_width, matrixB, $matB_height, $matB_width)
+#identity($matA_height) #pass a matrix height or width
+#transpose(matrixA, $matA_height, $matA_width)
+
+print("\n\nInsert a value for scaler and pow function between 1 & 10: ")
+int_input = gets.chomp.to_i   #takes input
+if !(int_input.between?(1, 10))  #doe not accept letters
+  while !(int_input.between?(1, 10))
+    print("Input must be a number between 1 & 10: ")
+    int_input = gets.chomp.to_i
+  end
+end
+print("Input value is: #{int_input}")
+scaler(matrixA, $matA_height, $matA_width, int_input)
+
+require "matrix" #crucial for matrix operations to work
+
+
+#convert "Array" to "Matrix" because determinant function
+#only accepts "Matrix" types
+matrixTmpA = Matrix[*matrixA] # * is splat operator: it essentially
+#can be used to treat an array  as if it weren't an array, but
+#rather as if its elements were individual elements/arguments.
+#Without the splat operator, ther would be an extra '[]' around matrixA
+matrixTmpB = Matrix[*matrixB]
+
+print "\n\n Determinant of matrix\n"
+matrix_detA = matrixTmpA.determinant()  #get result and store in variable
+print "\nMatrix determinant A: ", matrix_detA
+
+matrix_detB = matrixTmpB.determinant()
+print "\nMatrix determinant B: ", matrix_detB
+
+
+print "\n\n Inverse matrix\n"
+matrix_invA = matrixTmpA.inverse() #get result and store in new variable
+matrix_invA = *matrix_invA #covert from matrix back into array to print
+matrix_invA = to_Decimal(matrix_invA, $matA_height, $matA_width) #change fraction to decimal
+print "\nMatrix inverse A: ", matrix_invA
+print("\n\n")
+matrix_invB = matrixTmpB.inverse() #Do the same with matrix B
+matrix_invB = *matrix_invB #covert from matrix back into array to print
+matrix_invB = to_Decimal(matrix_invB, $matB_height, $matB_width) #change to decimal
+print "\nMatrix inverse B: ", matrix_invB
+
+
+print("\nPower/Exponent functions \n")
+matrix_powA = exponent(matrixTmpA, int_input) #call function and store result in new var.
+matrix_powA = *matrix_powA   #covert from matrix back into array. Indexes work now.
+print("\nExponent A: ", matrix_powA)
+print("\n\n")
+matrix_powB = exponent(matrixTmpB, int_input)
+matrix_powB = *matrix_powB   #covert from matrix back into array
+print("\nExponent B: ", matrix_powB)

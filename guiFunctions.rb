@@ -119,7 +119,7 @@ def btn_unaryPowerA_click
     n = $entry_unaryPowerA_Var
     col = findCol($matrixA)
     row = findRow($matrixA)
-    if (col == row) # must be a square
+    if (col == row && n >= 1 && n <= 10) # must be a square
         matrixA = convertMatrixToInteger($matrixA)
         matrixTmp = Matrix[*matrixA]
         #call function and store result in new var.
@@ -326,8 +326,7 @@ end
 
 def exponent(matrixTmp, input)
   # the double splat operator returns exponent of matrix
-  matrix = *matrixTmp
-  return matrix**input #splat operator make "Matrix" go away
+  return *matrixTmp**input #splat operator make "Matrix" go away
 end
 
 #scaler function

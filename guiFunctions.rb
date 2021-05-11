@@ -129,8 +129,16 @@ def btn_unaryPowerA_click
 end
 
 def btn_unaryPowerB_click
-    # gather input from entry box
-    puts $entry_unaryPowerB_Var
+    n = $entry_unaryPowerB_Var
+    col = findCol($matrixB)
+    row = findRow($matrixB)
+    if (col == row && n >= 1 && n <= 10) # must be a square
+        matrixB = convertMatrixToInteger($matrixB)
+        matrixTmp = Matrix[*matrixB]
+        #call function and store result in new var.
+        matrix = exponent(matrixTmp, n)
+        insert_MatrixOut(matrix)
+    end
 end
 # --start of binary function buttons--
 def btn_binaryAplusB_click
@@ -326,6 +334,7 @@ end
 
 def exponent(matrixTmp, input)
   # the double splat operator returns exponent of matrix
+  input = input.to_i
   return *matrixTmp**input #splat operator make "Matrix" go away
 end
 

@@ -48,14 +48,24 @@ def btn_unaryInvA_click
         matrixtmp = Matrix[*matrixA]
         matrix = matrixtmp.inverse()
         matrix = *matrix
-        # ERROR: prints but this breaks it idk why
+        # convert matrix to decimal format
         matrix = to_Decimal(matrix, findRow(matrix), findCol(matrix))
         insert_MatrixOut(matrix)
     end
 end
 
 def btn_unaryInvB_click
-
+    col = findCol($matrixB)
+    row = findRow($matrixB)
+    if (col == row) # inverse must be a square
+        matrixB = convertMatrixToInteger($matrixB)
+        matrixtmp = Matrix[*matrixB]
+        matrix = matrixtmp.inverse()
+        matrix = *matrix
+        # convert matrix to decimal format
+        matrix = to_Decimal(matrix, findRow(matrix), findCol(matrix))
+        insert_MatrixOut(matrix)
+    end
 end
 
 def btn_unaryDetA_click
@@ -83,27 +93,39 @@ end
 def btn_unaryNtimesA_click
     # gather input from entry box
     n = $entry_unaryNtimesA_Var
-    puts n
     col = findCol($matrixA)
     row = findRow($matrixA)
-    if (col == row) # must be a square
+    if (n >= 1 && n <= 10) # input must be between 1-10
         matrixA = convertMatrixToInteger($matrixA)
+        matrix = scaler(matrixA, row, col, n)
+        insert_MatrixOut(matrix)
     end
-    matrixtmp = Matrix[*matrixA]
-    puts matrixtmp
-    # ERROR: this also breaks, says cant find exponent()
-    matrix = exponent(matrixtmp, n)
-    insert_MatrixOut(matrix)
 end
 
 def btn_unaryNtimesB_click
     # gather input from entry box
-    puts $entry_unaryNtimesB_Var
+    n = $entry_unaryNtimesB_Var
+    col = findCol($matrixB)
+    row = findRow($matrixB)
+    if (n >= 1 && n <= 10) # input must be between 1-10
+        matrixB = convertMatrixToInteger($matrixB)
+        matrix = scaler(matrixB, row, col, n)
+        insert_MatrixOut(matrix)
+    end
 end
 
 def btn_unaryPowerA_click
     # gather input from entry box
-    puts $entry_unaryPowerA_Var
+    n = $entry_unaryPowerA_Var
+    col = findCol($matrixA)
+    row = findRow($matrixA)
+    if (col == row) # must be a square
+        matrixA = convertMatrixToInteger($matrixA)
+        matrixTmp = Matrix[*matrixA]
+        #call function and store result in new var.
+        matrix = exponent(matrixTmp, n)
+        insert_MatrixOut(matrix)
+    end
 end
 
 def btn_unaryPowerB_click
@@ -300,6 +322,40 @@ def convertMatrixToInteger(matrix)
         end
     end
     return matrixNew
+end
+
+def exponent(matrixTmp, input)
+  # the double splat operator returns exponent of matrix
+  matrix = *matrixTmp
+  return matrix**input #splat operator make "Matrix" go away
+end
+
+#scaler function
+def scaler(matrix, mat_height, mat_width, input)
+  row, col = mat_width, mat_height
+  matrixC = Array.new(row){Array.new(col)}
+  for i in 0..col-1
+    for j in 0..row-1
+      #multiply by input and store in different matrix
+      matrixC[i][j] = matrix[i][j] * input
+    end
+  end
+  print "\nMatrix index * #{input}\n", matrixC
+  return matrixC
+end
+
+#fraction to decimal function
+def to_Decimal(matrix, mat_height, mat_width)
+  row, col = mat_width, mat_height
+  matrixC = Array.new(row){Array.new(col)}
+  #loop through matrix
+  for i in 0..col-1
+    for j in 0..row-1
+      #change fraction to decimal and round to the 5th
+      matrixC[i][j] = matrix[i][j].to_f.round(5)
+    end
+  end
+  return matrixC
 end
 
 #function adds 2 matrices

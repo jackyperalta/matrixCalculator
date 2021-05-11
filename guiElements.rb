@@ -234,8 +234,6 @@ btn_binaryAswaptoB = TkButton.new(root) {
 }
 
 # entry boxes for unary operations
-entry_unaryDetA = TkEntry.new(root) { textvariable $entry_unaryDetA_Var }
-entry_unaryDetB = TkEntry.new(root) { textvariable $entry_unaryDetB_Var }
 entry_unaryNtimesA = TkEntry.new(root) { textvariable $entry_unaryNtimesA_Var }
 entry_unaryNtimesB = TkEntry.new(root) { textvariable $entry_unaryNtimesB_Var }
 entry_unaryPowerA = TkEntry.new(root) { textvariable $entry_unaryPowerA_Var }
@@ -244,7 +242,7 @@ entry_unaryPowerB = TkEntry.new(root) { textvariable $entry_unaryPowerB_Var }
 # Text boxes
 $text_MatrixA = TkText.new(root) {width 60; height 15; state 'disabled'}
 $text_MatrixB = TkText.new(root) {width 60; height 15; state 'disabled'}
-$text_MatrixOut = TkText.new(root) {width 60; height 15; state 'disabled'}
+$text_MatrixOut = TkText.new(root) {width 80; height 15; state 'disabled'}
 
 # Labels
 label_Output = TkLabel.new(root) {width 10; height 1; text 'OUTPUT'; borderwidth 0; relief 'groove'}
@@ -263,7 +261,7 @@ $text_MatrixOut.place('x' => 20, 'y' => 350)
 label_Output.place('x' => 20, 'y' => 325)
 
 # unary operation widgets
-x = 520
+x = 680
 y = 340
 label_Unary.place('x' => x, 'y' => y)
 btn_unaryAtoI.place('height' => 25, 'width' => 40, 'x' => x, 'y' => y+30)
@@ -273,9 +271,7 @@ btn_unaryBT.place('height' => 25, 'width' => 40, 'x' => x+120, 'y' => y+30)
 btn_unaryInvA.place('height' => 25, 'width' => 40, 'x' => x+160, 'y' => y+30)
 btn_unaryInvB.place('height' => 25, 'width' => 40, 'x' => x+200, 'y' => y+30)
 btn_unaryDetA.place('height' => 25, 'width' => 60, 'x' => x, 'y' => y+60)
-entry_unaryDetA.place('height' => 25, 'width' => 40, 'x' => x+55, 'y' => y+60)
-btn_unaryDetB.place('height' => 25, 'width' => 60, 'x' => x+100, 'y' => y+60)
-entry_unaryDetB.place('height' => 25, 'width' => 40, 'x' => x+155, 'y' => y+60)
+btn_unaryDetB.place('height' => 25, 'width' => 60, 'x' => x+60, 'y' => y+60)
 btn_unaryNtimesA.place('height' => 25, 'width' => 40, 'x' => x, 'y' => y+90)
 entry_unaryNtimesA.place('height' => 25, 'width' => 40, 'x' => x+35, 'y' => y+90)
 btn_unaryNtimesB.place('height' => 25, 'width' => 40, 'x' => x+80, 'y' => y+90)
@@ -286,7 +282,7 @@ btn_unaryPowerB.place('height' => 25, 'width' => 60, 'x' => x+100, 'y' => y+120)
 entry_unaryPowerB.place('height' => 25, 'width' => 40, 'x' => x+155, 'y' => y+120)
 
 # binary operation widgets
-x = 520
+x = 680
 y = 500
 label_Binary.place('x' => x, 'y' => y)
 btn_binaryAplusB.place('height' => 25, 'width' => 40, 'x' => x, 'y' => y+30)

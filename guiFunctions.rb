@@ -255,8 +255,12 @@ def btn_loadMatrixA_click
     CSV.foreach($matrixAFileName) do |row|
         matrixAtmp.push(row.to_a)
     end
-    $matrixA = matrixAtmp
-    insert_MatrixA($matrixA)
+    if (matrixOnlyDigits(matrixAtmp))
+        $matrixA = matrixAtmp
+        insert_MatrixA($matrixA)
+    else
+        insert_MatrixOut_ERROR("Letters not allowed in .csv file..")
+    end
 end
 
 def btn_loadMatrixB_click
@@ -265,8 +269,12 @@ def btn_loadMatrixB_click
     CSV.foreach($matrixBFileName) do |row|
         matrixBtmp.push(row.to_a)
     end
-    $matrixB = matrixBtmp
-    insert_MatrixB($matrixB)
+    if (matrixOnlyDigits(matrixBtmp))
+        $matrixB = matrixBtmp
+        insert_MatrixB($matrixB)
+    else
+        insert_MatrixOut_ERROR("Letters not allowed in .csv file..")
+    end
 end
 
 # insert Matrix's into their text boxes
@@ -369,8 +377,8 @@ def convertMatrixToInteger(matrix)
     col = findCol(matrix)
     row = findRow(matrix)
     matrixNew = Array.new(row){Array.new(col)}
-    for i in 0..col-1
-        for j in 0..row-1
+    for i in 0..row-1
+        for j in 0..col-1
             matrixNew[i][j] = matrix[i][j].to_i
         end
     end
@@ -408,6 +416,27 @@ def to_Decimal(matrix, mat_height, mat_width)
     end
   end
   return matrixC
+end
+
+def matrixOnlyDigits(matrix)
+    row = findRow(matrix)
+    col = findCol(matrix)
+    #matrix = convertMatrixToInteger(matrix)
+
+    for i in 0..row-1
+        for j in 0..col-1
+            if (is_letter?(matrix[i][j]))
+                return false
+            end
+        end
+    end
+    return true
+end
+
+def is_letter?(str)
+    # Use 'str[/[a-zA-Z]*/] == str' to let all_letters
+    # yield true for the empty string
+    str[/[a-zA-Z]+/]  == str
 end
 
 #function adds 2 matrices
@@ -450,7 +479,7 @@ def multiply(matrix1, matrix2, row1, col1, row2, col2) #A's columns must equal B
       matrix[i][j] = 0  #set all to 0 initially
     end
   end
-  insert_MatrixOut(matrix)
+
   for i in 0..matrix.length - 1
     for j in 0..matrix[0].length - 1
       for k in 0..matrix1[0].length - 1

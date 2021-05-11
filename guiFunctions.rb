@@ -74,19 +74,41 @@ def btn_binaryAplusB_click
 end
 
 def btn_binaryAminusB_click
-
+    rowA = findRow($matrixA)
+    colA = findCol($matrixA)
+    rowB = findRow($matrixB)
+    colB = findCol($matrixB)
+    # if both are the same size, continue
+    if (rowA == rowB && colA == colB)
+        matrixC = subtract($matrixA, $matrixB, rowA, colA)
+        insert_MatrixOut(matrixC)
+    end
 end
 
 def btn_binaryBminusA_click
-
+    rowA = findRow($matrixA)
+    colA = findCol($matrixA)
+    rowB = findRow($matrixB)
+    colB = findCol($matrixB)
+    # if both are the same size, continue
+    if (rowA == rowB && colA == colB)
+        matrixC = subtract($matrixB, $matrixA, rowA, colA)
+        insert_MatrixOut(matrixC)
+    end
 end
 
 def btn_binaryAtimesB_click
-
+    colA = findCol($matrixA)
+    rowB = findRow($matrixB)
+    matrixC = multiply($matrixA, $matrixB, rowB, colA)
+    insert_MatrixOut(matrixC)
 end
 
 def btn_binaryBtimesA_click
-
+    colB = findCol($matrixB)
+    rowA = findRow($matrixA)
+    matrixC = multiply($matrixA, $matrixB, rowA, colB)
+    insert_MatrixOut(matrixC)
 end
 
 def btn_binaryAcopytoB_click
@@ -113,7 +135,7 @@ def btn_loadMatrixA_click
     row, col = 0, 0
     matrixAtmp = Array.new(row){Array.new(col)}
     CSV.foreach($matrixAFileName) do |row|
-        matrixAtmp.push(row)
+        matrixAtmp.push(row.to_a)
     end
     $matrixA = matrixAtmp
     insert_MatrixA($matrixA)
@@ -123,7 +145,7 @@ def btn_loadMatrixB_click
     row, col = 0, 0
     matrixBtmp = Array.new(row){Array.new(col)}
     CSV.foreach($matrixBFileName) do |row|
-        matrixBtmp.push(row)
+        matrixBtmp.push(row.to_a)
     end
     $matrixB = matrixBtmp
     insert_MatrixB($matrixB)
@@ -141,7 +163,7 @@ def insert_MatrixA (matrix)
             $text_MatrixA.insert(index , element)
             j = j + 4
             index = i.to_s + "." + j.to_s
-            $text_MatrixA.insert(index , " ")
+            $text_MatrixA.insert(index , ",")
             j = j + 4
         end
         index = i.to_s + "." + j.to_s
@@ -162,7 +184,7 @@ def insert_MatrixB (matrix)
             $text_MatrixB.insert(index , element)
             j = j + 4
             index = i.to_s + "." + j.to_s
-            $text_MatrixB.insert(index , " ")
+            $text_MatrixB.insert(index , ",")
             j = j + 4
         end
         index = i.to_s + "." + j.to_s
@@ -183,7 +205,7 @@ def insert_MatrixOut (matrix)
             $text_MatrixOut.insert(index , element)
             j = j + 4
             index = i.to_s + "." + j.to_s
-            $text_MatrixOut.insert(index , " ")
+            $text_MatrixOut.insert(index , ",")
             j = j + 4
         end
         index = i.to_s + "." + j.to_s
@@ -221,7 +243,7 @@ def add(matrixA, matrixB, row, col)
   for i in 0..col-1
     for j in 0..row-1
       #add and store into 3rd matrix
-      matrixC[i][j] = matrixA[i][j] + matrixB[i][j]
+      matrixC[i][j] = matrixA[i][j].to_i + matrixB[i][j].to_i
     end
   end
 print "\nMatrix A + Matrix B\n", matrixC
@@ -229,23 +251,23 @@ return matrixC
 end
 
 #function subtracts 2 matrices
-def subtract(matrixA, matrixB) #A and B must be same size
+def subtract(matrixA, matrixB, row, col) #A and B must be same size
   #take matrix size and store into row & col
-  row, col = $matA_width, $matB_height
   #declare 3rd matrix with size of matrix width and height
   matrixC = Array.new(row){Array.new(col)}
   for i in 0..col-1
     for j in 0..row-1
       #subtract and store into 3rd matrix
-      matrixC[i][j] = matrixA[i][j] - matrixB[i][j]
+      matrixC[i][j] = matrixA[i][j].to_i - matrixB[i][j].to_i
     end
   end
 print "\nMatrix A - Matrix B\n", matrixC
+return matrixC
 end
 
 #fuction for matrix multiplication
-def multiply(matrixA, matrixB) #A's columns must equal B's rows
-  row, col = $matA_width, $matB_height
+def multiply(matrixA, matrixB, row, col) #A's columns must equal B's rows
+  #row, col = $matA_width, $matB_height
       #create a 3rd matrix
       #3rd matrix will have size of matrix A's column
       # and matrix B's row.
@@ -261,11 +283,12 @@ def multiply(matrixA, matrixB) #A's columns must equal B's rows
     for j in 0..matrixC[0].length - 1
       for k in 0..matrixA[0].length - 1
         #multiplication of matrices is added to 3rd matrix
-        matrixC[i][j] += matrixA[i][k] * matrixB[k][j]
+        matrixC[i][j] += matrixA[i][k].to_i * matrixB[k][j].to_i
       end
     end
   end
   print "\nMatrix A * Matrix B\n", matrixC
+  return matrixC
 end
 
 #Identity matrix function

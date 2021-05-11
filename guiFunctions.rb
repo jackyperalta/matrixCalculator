@@ -10,18 +10,22 @@ end
 def btn_unaryAtoI_click
     row = findRow($matrixA)
     col = findCol($matrixA)
-    if (row == col)
+    if (row == col) # must be square
         matrix = identity(row)
         insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("MatrixA must have equal rows to columns..")
     end
 end
 
 def btn_unaryBtoI_click
     row = findRow($matrixB)
     col = findCol($matrixB)
-    if (row == col)
+    if (row == col) # must be square
         matrix = identity(row)
         insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("MatrixB must have equal rows to columns..")
     end
 end
 
@@ -51,6 +55,8 @@ def btn_unaryInvA_click
         # convert matrix to decimal format
         matrix = to_Decimal(matrix, findRow(matrix), findCol(matrix))
         insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("MatrixA must be square matrix..")
     end
 end
 
@@ -65,6 +71,8 @@ def btn_unaryInvB_click
         # convert matrix to decimal format
         matrix = to_Decimal(matrix, findRow(matrix), findCol(matrix))
         insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("MatrixB must be square matrix..")
     end
 end
 
@@ -73,10 +81,12 @@ def btn_unaryDetA_click
     row = findRow($matrixA)
     if (col == row) # must be a square
         matrixA = convertMatrixToInteger($matrixA)
+        matrixtmp = Matrix[*matrixA]
+        matrix = matrixtmp.determinant()
+        insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("MatrixA must be square matrix..")
     end
-    matrixtmp = Matrix[*matrixA]
-    matrix = matrixtmp.determinant()
-    insert_MatrixOut(matrix)
 end
 
 def btn_unaryDetB_click
@@ -84,10 +94,12 @@ def btn_unaryDetB_click
     row = findRow($matrixB)
     if (col == row) # must be a square
         matrixB = convertMatrixToInteger($matrixB)
+        matrixtmp = Matrix[*matrixB]
+        matrix = matrixtmp.determinant()
+        insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("MatrixB must be square matrix..")
     end
-    matrixtmp = Matrix[*matrixB]
-    matrix = matrixtmp.determinant()
-    insert_MatrixOut(matrix)
 end
 
 def btn_unaryNtimesA_click
@@ -99,6 +111,8 @@ def btn_unaryNtimesA_click
         matrixA = convertMatrixToInteger($matrixA)
         matrix = scaler(matrixA, row, col, n)
         insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("Input is between 1-10..")
     end
 end
 
@@ -111,6 +125,8 @@ def btn_unaryNtimesB_click
         matrixB = convertMatrixToInteger($matrixB)
         matrix = scaler(matrixB, row, col, n)
         insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("Input is between 1-10..")
     end
 end
 
@@ -125,6 +141,8 @@ def btn_unaryPowerA_click
         #call function and store result in new var.
         matrix = exponent(matrixTmp, n)
         insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("Must be square matrix and input is between 1-10..")
     end
 end
 
@@ -138,6 +156,8 @@ def btn_unaryPowerB_click
         #call function and store result in new var.
         matrix = exponent(matrixTmp, n)
         insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("Must be square matrix and input is between 1-10..")
     end
 end
 # --start of binary function buttons--
@@ -150,6 +170,8 @@ def btn_binaryAplusB_click
     if (rowA == rowB && colA == colB)
         matrixC = add($matrixA, $matrixB, rowA, colA)
         insert_MatrixOut(matrixC)
+    else
+        insert_MatrixOut_ERROR("Both MatrixA and MatrixB must be same size..")
     end
 end
 
@@ -162,6 +184,8 @@ def btn_binaryAminusB_click
     if (rowA == rowB && colA == colB)
         matrixC = subtract($matrixA, $matrixB, rowA, colA)
         insert_MatrixOut(matrixC)
+    else
+        insert_MatrixOut_ERROR("Both MatrixA and MatrixB must be same size..")
     end
 end
 
@@ -174,21 +198,35 @@ def btn_binaryBminusA_click
     if (rowA == rowB && colA == colB)
         matrixC = subtract($matrixB, $matrixA, rowA, colA)
         insert_MatrixOut(matrixC)
+    else
+        insert_MatrixOut_ERROR("Both MatrixA and MatrixB must be same size..")
     end
 end
 
 def btn_binaryAtimesB_click
+    rowA = findRow($matrixA)
     colA = findCol($matrixA)
     rowB = findRow($matrixB)
-    matrixC = multiply($matrixA, $matrixB, rowB, colA)
-    insert_MatrixOut(matrixC)
+    colB = findCol($matrixB)
+    if (colA == rowB)
+        matrixC = multiply($matrixA, $matrixB, rowA, colA, rowB, colB)
+        insert_MatrixOut(matrixC)
+    else
+        insert_MatrixOut_ERROR("A's columns must be equal to B's rows..")
+    end
 end
 
 def btn_binaryBtimesA_click
-    colB = findCol($matrixB)
     rowA = findRow($matrixA)
-    matrixC = multiply($matrixB, $matrixA, rowA, colB)
-    insert_MatrixOut(matrixC)
+    colA = findCol($matrixA)
+    rowB = findRow($matrixB)
+    colB = findCol($matrixB)
+    if (colB == rowA)
+        matrixC = multiply($matrixB, $matrixA, rowB, colB, rowA, colA)
+        insert_MatrixOut(matrixC)
+    else
+        insert_MatrixOut_ERROR("B's columns must be equal to A's rows..")
+    end
 end
 
 def btn_binaryAcopytoB_click
@@ -300,6 +338,13 @@ def insert_MatrixOut (matrix)
     $text_MatrixOut['state'] = 'disabled'
 end
 
+def insert_MatrixOut_ERROR(message)
+    $text_MatrixOut['state'] = 'normal'
+    $text_MatrixOut.delete(1.0, 10.40)
+    $text_MatrixOut.insert(1.0, message)
+    $text_MatrixOut['state'] = 'disabled'
+end
+
 def findRow(matrix_input)
     rowCount = 0
     # start finding row
@@ -348,7 +393,6 @@ def scaler(matrix, mat_height, mat_width, input)
       matrixC[i][j] = matrix[i][j] * input
     end
   end
-  #print "\nMatrix index * #{input}\n", matrixC
   return matrixC
 end
 
@@ -371,13 +415,12 @@ def add(matrixA, matrixB, row, col)
   #take matrix size and store into row & col
   #declare 3rd matrix with size of matrix width and height
   matrixC = Array.new(row){Array.new(col)}
-  for i in 0..col-1
-    for j in 0..row-1
+  for i in 0..row-1
+    for j in 0..col-1
       #add and store into 3rd matrix
       matrixC[i][j] = matrixA[i][j].to_i + matrixB[i][j].to_i
     end
   end
-  #print "\nMatrix A + Matrix B\n", matrixC
   return matrixC
 end
 
@@ -386,40 +429,37 @@ def subtract(matrixA, matrixB, row, col) #A and B must be same size
   #take matrix size and store into row & col
   #declare 3rd matrix with size of matrix width and height
   matrixC = Array.new(row){Array.new(col)}
-  for i in 0..col-1
-    for j in 0..row-1
+  for i in 0..row-1
+    for j in 0..col-1
       #subtract and store into 3rd matrix
       matrixC[i][j] = matrixA[i][j].to_i - matrixB[i][j].to_i
     end
   end
-  #print "\nMatrix A - Matrix B\n", matrixC
   return matrixC
 end
 
 #fuction for matrix multiplication
-def multiply(matrixA, matrixB, row, col) #A's columns must equal B's rows
-  #row, col = $matA_width, $matB_height
+def multiply(matrix1, matrix2, row1, col1, row2, col2) #A's columns must equal B's rows
       #create a 3rd matrix
       #3rd matrix will have size of matrix A's column
       # and matrix B's row.
-  matrixC = Array.new(matrixA.length){Array.new(matrixB[0].length)}
+  matrix = Array.new(row1){Array.new(col2)}
 
-  for i in 0..col - 1
-    for j in 0..row - 1
-      matrixC[i][j] = 0  #set all to 0 initially
+  for i in 0..matrix.length - 1
+    for j in 0..matrix[0].length - 1
+      matrix[i][j] = 0  #set all to 0 initially
     end
   end
-
-  for i in 0..matrixC.length - 1
-    for j in 0..matrixC[0].length - 1
-      for k in 0..matrixA[0].length - 1
+  insert_MatrixOut(matrix)
+  for i in 0..matrix.length - 1
+    for j in 0..matrix[0].length - 1
+      for k in 0..matrix1[0].length - 1
         #multiplication of matrices is added to 3rd matrix
-        matrixC[i][j] += matrixA[i][k].to_i * matrixB[k][j].to_i
+        matrix[i][j] += matrix1[i][k].to_i * matrix2[k][j].to_i
       end
     end
   end
-  #print "\nMatrix A * Matrix B\n", matrixC
-  return matrixC
+  return matrix
 end
 
 #Identity matrix function
@@ -434,7 +474,6 @@ def identity(size)  #matrix must be square
       end
     end
   end
-  #print "\n\nIdentity matrix: ", matrixC, "\n"
   return matrixC
 end
 
@@ -448,6 +487,5 @@ def transpose(matrix, height, width)
       matrixC[j][i] = matrix[i][j]
     end
   end
-  #print "\nTranspose of matrix ", matrixC,"\n"
   return matrixC
 end

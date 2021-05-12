@@ -84,6 +84,7 @@ def btn_unaryDetA_click
         matrixA = convertMatrixToInteger($matrixA)
         matrixtmp = Matrix[*matrixA]
         matrix = matrixtmp.determinant()
+        puts matrix
         insert_MatrixOut(matrix)
     else
         insert_MatrixOut_ERROR("MatrixA must be square matrix..")
@@ -445,11 +446,11 @@ def insert_MatrixOut (matrix)
     $text_MatrixOut.delete(1.0, 10.40)
     i = 1
     j = 0
-    col = findCol(matrix)
     if (matrix.is_a? Integer)
         index = i.to_s + "." + j.to_s
         $text_MatrixOut.insert(index , matrix)
     else
+        col = findCol(matrix)
         matrix.each do |row|
             count = 0
             row.each do |element|

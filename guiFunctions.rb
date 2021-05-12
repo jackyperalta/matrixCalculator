@@ -1,4 +1,4 @@
-# button click funcitons
+# ----button click functions----
 def btn_openMatrixA_click
     $matrixAFileName = Tk.getOpenFile
 end
@@ -6,22 +6,27 @@ end
 def btn_openMatrixB_click
     $matrixBFileName = Tk.getOpenFile
 end
+
 # start of unary button functions
 def btn_unaryAtoI_click
     row = findRow($matrixA)
     col = findCol($matrixA)
-    if (row == col)
+    if (row == col) # must be square
         matrix = identity(row)
         insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("MatrixA must have equal rows to columns..")
     end
 end
 
 def btn_unaryBtoI_click
     row = findRow($matrixB)
     col = findCol($matrixB)
-    if (row == col)
+    if (row == col) # must be square
         matrix = identity(row)
         insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("MatrixB must have equal rows to columns..")
     end
 end
 
@@ -48,14 +53,28 @@ def btn_unaryInvA_click
         matrixtmp = Matrix[*matrixA]
         matrix = matrixtmp.inverse()
         matrix = *matrix
-        # ERROR: prints but this breaks it idk why
+        # convert matrix to decimal format
         matrix = to_Decimal(matrix, findRow(matrix), findCol(matrix))
         insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("MatrixA must be square matrix..")
     end
 end
 
 def btn_unaryInvB_click
-
+    col = findCol($matrixB)
+    row = findRow($matrixB)
+    if (col == row) # inverse must be a square
+        matrixB = convertMatrixToInteger($matrixB)
+        matrixtmp = Matrix[*matrixB]
+        matrix = matrixtmp.inverse()
+        matrix = *matrix
+        # convert matrix to decimal format
+        matrix = to_Decimal(matrix, findRow(matrix), findCol(matrix))
+        insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("MatrixB must be square matrix..")
+    end
 end
 
 def btn_unaryDetA_click
@@ -63,10 +82,13 @@ def btn_unaryDetA_click
     row = findRow($matrixA)
     if (col == row) # must be a square
         matrixA = convertMatrixToInteger($matrixA)
+        matrixtmp = Matrix[*matrixA]
+        matrix = matrixtmp.determinant()
+        puts matrix
+        insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("MatrixA must be square matrix..")
     end
-    matrixtmp = Matrix[*matrixA]
-    matrix = matrixtmp.determinant()
-    insert_MatrixOut(matrix)
 end
 
 def btn_unaryDetB_click
@@ -74,147 +96,315 @@ def btn_unaryDetB_click
     row = findRow($matrixB)
     if (col == row) # must be a square
         matrixB = convertMatrixToInteger($matrixB)
+        matrixtmp = Matrix[*matrixB]
+        matrix = matrixtmp.determinant()
+        insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("MatrixB must be square matrix..")
     end
-    matrixtmp = Matrix[*matrixB]
-    matrix = matrixtmp.determinant()
-    insert_MatrixOut(matrix)
 end
 
 def btn_unaryNtimesA_click
     # gather input from entry box
     n = $entry_unaryNtimesA_Var
-    puts n
     col = findCol($matrixA)
     row = findRow($matrixA)
-    if (col == row) # must be a square
+    if (n >= 1 && n <= 10) # input must be between 1-10
         matrixA = convertMatrixToInteger($matrixA)
+        matrix = scaler(matrixA, row, col, n)
+        insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("Input is between 1-10..")
     end
-    matrixtmp = Matrix[*matrixA]
-    puts matrixtmp
-    # ERROR: this also breaks, says cant find exponent()
-    matrix = exponent(matrixtmp, n)
-    insert_MatrixOut(matrix)
 end
 
 def btn_unaryNtimesB_click
     # gather input from entry box
-    puts $entry_unaryNtimesB_Var
+    n = $entry_unaryNtimesB_Var
+    col = findCol($matrixB)
+    row = findRow($matrixB)
+    if (n >= 1 && n <= 10) # input must be between 1-10
+        matrixB = convertMatrixToInteger($matrixB)
+        matrix = scaler(matrixB, row, col, n)
+        insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("Input is between 1-10..")
+    end
 end
 
 def btn_unaryPowerA_click
     # gather input from entry box
-    puts $entry_unaryPowerA_Var
+    n = $entry_unaryPowerA_Var
+    col = findCol($matrixA)
+    row = findRow($matrixA)
+    if (col == row && n >= 1 && n <= 10) # must be a square
+        matrixA = convertMatrixToInteger($matrixA)
+        matrixTmp = Matrix[*matrixA]
+        #call function and store result in new var.
+        matrix = exponent(matrixTmp, n)
+        insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("Must be square matrix and input is between 1-10..")
+    end
 end
 
 def btn_unaryPowerB_click
-    # gather input from entry box
-    puts $entry_unaryPowerB_Var
+    n = $entry_unaryPowerB_Var
+    col = findCol($matrixB)
+    row = findRow($matrixB)
+    if (col == row && n >= 1 && n <= 10) # must be a square
+        matrixB = convertMatrixToInteger($matrixB)
+        matrixTmp = Matrix[*matrixB]
+        #call function and store result in new var.
+        matrix = exponent(matrixTmp, n)
+        insert_MatrixOut(matrix)
+    else
+        insert_MatrixOut_ERROR("Must be square matrix and input is between 1-10..")
+    end
 end
+
 # --start of binary function buttons--
 def btn_binaryAplusB_click
-    rowA = findRow($matrixA)
-    colA = findCol($matrixA)
-    rowB = findRow($matrixB)
-    colB = findCol($matrixB)
-    # if both are the same size, continue
-    if (rowA == rowB && colA == colB)
-        matrixC = add($matrixA, $matrixB, rowA, colA)
-        insert_MatrixOut(matrixC)
+    if ($matrixA == nil || $matrixB == nil)
+        insert_MatrixOut_ERROR("MatrixA or MatrixB are empty..")
+    else
+        rowA = findRow($matrixA)
+        colA = findCol($matrixA)
+        rowB = findRow($matrixB)
+        colB = findCol($matrixB)
+        # if both are the same size, continue
+        if (rowA == rowB && colA == colB)
+            matrixC = add($matrixA, $matrixB, rowA, colA)
+            insert_MatrixOut(matrixC)
+        else
+            insert_MatrixOut_ERROR("Both MatrixA and MatrixB must be same size..")
+        end
     end
 end
 
 def btn_binaryAminusB_click
-    rowA = findRow($matrixA)
-    colA = findCol($matrixA)
-    rowB = findRow($matrixB)
-    colB = findCol($matrixB)
-    # if both are the same size, continue
-    if (rowA == rowB && colA == colB)
-        matrixC = subtract($matrixA, $matrixB, rowA, colA)
-        insert_MatrixOut(matrixC)
+    if ($matrixA == nil || $matrixB == nil)
+        insert_MatrixOut_ERROR("MatrixA or MatrixB are empty..")
+    else
+        rowA = findRow($matrixA)
+        colA = findCol($matrixA)
+        rowB = findRow($matrixB)
+        colB = findCol($matrixB)
+        # if both are the same size, continue
+        if (rowA == rowB && colA == colB)
+            matrixC = subtract($matrixA, $matrixB, rowA, colA)
+            insert_MatrixOut(matrixC)
+        else
+            insert_MatrixOut_ERROR("Both MatrixA and MatrixB must be same size..")
+        end
     end
 end
 
 def btn_binaryBminusA_click
-    rowA = findRow($matrixA)
-    colA = findCol($matrixA)
-    rowB = findRow($matrixB)
-    colB = findCol($matrixB)
-    # if both are the same size, continue
-    if (rowA == rowB && colA == colB)
-        matrixC = subtract($matrixB, $matrixA, rowA, colA)
-        insert_MatrixOut(matrixC)
+    if ($matrixA == nil || $matrixB == nil)
+        insert_MatrixOut_ERROR("MatrixA or MatrixB are empty..")
+    else
+        rowA = findRow($matrixA)
+        colA = findCol($matrixA)
+        rowB = findRow($matrixB)
+        colB = findCol($matrixB)
+        # if both are the same size, continue
+        if (rowA == rowB && colA == colB)
+            matrixC = subtract($matrixB, $matrixA, rowA, colA)
+            insert_MatrixOut(matrixC)
+        else
+            insert_MatrixOut_ERROR("Both MatrixA and MatrixB must be same size..")
+        end
     end
 end
 
 def btn_binaryAtimesB_click
-    colA = findCol($matrixA)
-    rowB = findRow($matrixB)
-    matrixC = multiply($matrixA, $matrixB, rowB, colA)
-    insert_MatrixOut(matrixC)
+    if ($matrixA == nil || $matrixB == nil)
+        insert_MatrixOut_ERROR("MatrixA or MatrixB are empty..")
+    else
+        rowA = findRow($matrixA)
+        colA = findCol($matrixA)
+        rowB = findRow($matrixB)
+        colB = findCol($matrixB)
+        if (colA == rowB)
+            matrixC = multiply($matrixA, $matrixB, rowA, colA, rowB, colB)
+            insert_MatrixOut(matrixC)
+        else
+            insert_MatrixOut_ERROR("A's columns must be equal to B's rows..")
+        end
+    end
 end
 
 def btn_binaryBtimesA_click
-    colB = findCol($matrixB)
-    rowA = findRow($matrixA)
-    matrixC = multiply($matrixB, $matrixA, rowA, colB)
-    insert_MatrixOut(matrixC)
+    if ($matrixA == nil || $matrixB == nil)
+        insert_MatrixOut_ERROR("MatrixA or MatrixB are empty..")
+    else
+        rowA = findRow($matrixA)
+        colA = findCol($matrixA)
+        rowB = findRow($matrixB)
+        colB = findCol($matrixB)
+        if (colB == rowA)
+            matrixC = multiply($matrixB, $matrixA, rowB, colB, rowA, colA)
+            insert_MatrixOut(matrixC)
+        else
+            insert_MatrixOut_ERROR("B's columns must be equal to A's rows..")
+        end
+    end
 end
 
 def btn_binaryAcopytoB_click
-    $matrixB = $matrixA
-    insert_MatrixB($matrixB)
+    if ($matrixA == nil)
+        insert_MatrixOut_ERROR("MatrixA or MatrixB are empty..")
+    else
+        $matrixB = $matrixA
+        insert_MatrixB($matrixB)
+    end
 end
 
 def btn_binaryBcopytoA_click
-    $matrixA = $matrixB
-    insert_MatrixA($matrixA)
+    if ($matrixB == nil)
+        insert_MatrixOut_ERROR("MatrixA or MatrixB are empty..")
+    else
+        $matrixA = $matrixB
+        insert_MatrixA($matrixA)
+    end
+end
+
+def btn_outToA_click
+    if ($matrixOut == nil)
+        insert_MatrixOut_ERROR("Nothing outputted to copy..")
+    else
+        $matrixA = $matrixOut
+        insert_MatrixA($matrixOut)
+    end
+end
+
+def btn_outToB_click
+    if ($matrixOut == nil)
+        insert_MatrixOut_ERROR("Nothing outputted to copy..")
+    else
+        $matrixB = $matrixOut
+        insert_MatrixB($matrixOut)
+    end
 end
 
 def btn_binaryAswaptoB_click
-    matrixtmp = $matrixA
-    $matrixA = $matrixB
-    $matrixB = matrixtmp
-    insert_MatrixA($matrixA)
-    insert_MatrixB($matrixB)
+    if ($matrixA == nil || $matrixB == nil)
+        insert_MatrixOut_ERROR("MatrixA or MatrixB are empty..")
+    else
+        matrixtmp = $matrixA
+        $matrixA = $matrixB
+        $matrixB = matrixtmp
+        insert_MatrixA($matrixA)
+        insert_MatrixB($matrixB)
+    end
+end
+
+def enableAllBtns(input)
+    if (input == 'A')
+        $btn_unaryAtoI['state'] = "normal"
+        $btn_unaryAT['state'] = "normal"
+        $btn_unaryInvA['state'] = "normal"
+        $btn_unaryDetA['state'] = "normal"
+        $btn_unaryNtimesA['state'] = "normal"
+        $btn_unaryPowerA['state'] = "normal"
+    elsif (input == 'B')
+        $btn_unaryBtoI['state'] = "normal"
+        $btn_unaryBT['state'] = "normal"
+        $btn_unaryInvB['state'] = "normal"
+        $btn_unaryDetB['state'] = "normal"
+        $btn_unaryNtimesB['state'] = "normal"
+        $btn_unaryPowerB['state'] = "normal"
+    end
+end
+
+def disableAllBtns(input)
+    if (input == 'A')
+        $btn_unaryAtoI['state'] = "disabled"
+        $btn_unaryAT['state'] = "disabled"
+        $btn_unaryInvA['state'] = "disabled"
+        $btn_unaryDetA['state'] = "disabled"
+        $btn_unaryNtimesA['state'] = "disabled"
+        $btn_unaryPowerA['state'] = "disabled"
+    elsif (input == 'B')
+        $btn_unaryBtoI['state'] = "disabled"
+        $btn_unaryBT['state'] = "disabled"
+        $btn_unaryInvB['state'] = "disabled"
+        $btn_unaryDetB['state'] = "disabled"
+        $btn_unaryNtimesB['state'] = "disabled"
+        $btn_unaryPowerB['state'] = "disabled"
+    end
 end
 
 # gathering input from csv file functions
+require 'pathname'
 require 'csv'
 def btn_loadMatrixA_click
-    row, col = 0, 0
-    matrixAtmp = Array.new(row){Array.new(col)}
-    CSV.foreach($matrixAFileName) do |row|
-        matrixAtmp.push(row.to_a)
+    if ($matrixAFileName == nil)
+        insert_MatrixOut_ERROR("No file selected for MatrixA..")
+    else
+        enableAllBtns('A')
+        row, col = 0, 0
+        matrixAtmp = Array.new(row){Array.new(col)}
+        CSV.foreach($matrixAFileName) do |row|
+            matrixAtmp.push(row.to_a)
+        end
+        if (matrixOnlyDigits(matrixAtmp))
+            $matrixA = matrixAtmp
+            insert_MatrixA($matrixA)
+            # updating filename to GUI
+            file = Pathname.new($matrixAFileName).basename
+            $label_MatrixA['textvariable'] = $label_MatrixAText
+            $label_MatrixAText.value = file
+        else
+            insert_MatrixOut_ERROR("Letters not allowed in .csv file..")
+        end
     end
-    $matrixA = matrixAtmp
-    insert_MatrixA($matrixA)
 end
 
 def btn_loadMatrixB_click
-    row, col = 0, 0
-    matrixBtmp = Array.new(row){Array.new(col)}
-    CSV.foreach($matrixBFileName) do |row|
-        matrixBtmp.push(row.to_a)
+    if ($matrixBFileName == nil)
+        insert_MatrixOut_ERROR("No file selected for MatrixB..")
+    else
+        enableAllBtns('B')
+        row, col = 0, 0
+        matrixBtmp = Array.new(row){Array.new(col)}
+        CSV.foreach($matrixBFileName) do |row|
+            matrixBtmp.push(row.to_a)
+        end
+        if (matrixOnlyDigits(matrixBtmp))
+            $matrixB = matrixBtmp
+            insert_MatrixB($matrixB)
+            # updating filename to GUI
+            file = Pathname.new($matrixBFileName).basename
+            $label_MatrixB['textvariable'] = $label_MatrixBText
+            $label_MatrixBText.value = file
+        else
+            insert_MatrixOut_ERROR("Letters not allowed in .csv file..")
+        end
     end
-    $matrixB = matrixBtmp
-    insert_MatrixB($matrixB)
 end
 
 # insert Matrix's into their text boxes
 def insert_MatrixA (matrix)
+    enableAllBtns('A')
     $text_MatrixA['state'] = 'normal'
     $text_MatrixA.delete(1.0, 10.40)
     i = 1
     j = 0
+    col = findCol(matrix)
     matrix.each do |row|
+        count = 0
         row.each do |element|
             index = i.to_s + "." + j.to_s
             $text_MatrixA.insert(index , element)
-            j = j + 4
-            index = i.to_s + "." + j.to_s
-            $text_MatrixA.insert(index , ",")
-            j = j + 4
+            if (count != col-1)
+                j = j + 10
+                index = i.to_s + "." + j.to_s
+                $text_MatrixA.insert(index , ",")
+            end
+            j = j + 10
+            count += 1
         end
         index = i.to_s + "." + j.to_s
         $text_MatrixA.insert(index, "\n")
@@ -224,18 +414,24 @@ def insert_MatrixA (matrix)
 end
 
 def insert_MatrixB (matrix)
+    enableAllBtns('B')
     $text_MatrixB['state'] = 'normal'
     $text_MatrixB.delete(1.0, 10.40)
     i = 1
     j = 0
+    col = findCol(matrix)
     matrix.each do |row|
+        count = 0
         row.each do |element|
             index = i.to_s + "." + j.to_s
             $text_MatrixB.insert(index , element)
-            j = j + 4
-            index = i.to_s + "." + j.to_s
-            $text_MatrixB.insert(index , ",")
-            j = j + 4
+            if (count != col-1)
+                j = j + 10
+                index = i.to_s + "." + j.to_s
+                $text_MatrixB.insert(index , ",")
+            end
+            j = j + 10
+            count += 1
         end
         index = i.to_s + "." + j.to_s
         $text_MatrixB.insert(index, "\n")
@@ -245,6 +441,7 @@ def insert_MatrixB (matrix)
 end
 
 def insert_MatrixOut (matrix)
+    $matrixOut = matrix
     $text_MatrixOut['state'] = 'normal'
     $text_MatrixOut.delete(1.0, 10.40)
     i = 1
@@ -253,20 +450,32 @@ def insert_MatrixOut (matrix)
         index = i.to_s + "." + j.to_s
         $text_MatrixOut.insert(index , matrix)
     else
+        col = findCol(matrix)
         matrix.each do |row|
+            count = 0
             row.each do |element|
                 index = i.to_s + "." + j.to_s
                 $text_MatrixOut.insert(index , element)
-                j = j + 4
-                index = i.to_s + "." + j.to_s
-                $text_MatrixOut.insert(index , ",")
-                j = j + 4
+                if (count != col-1)
+                    j = j + 10
+                    index = i.to_s + "." + j.to_s
+                    $text_MatrixOut.insert(index , ",")
+                end
+                j = j + 10
+                count += 1
             end
             index = i.to_s + "." + j.to_s
             $text_MatrixOut.insert(index, "\n")
             i = i + 1
         end
     end
+    $text_MatrixOut['state'] = 'disabled'
+end
+
+def insert_MatrixOut_ERROR(message)
+    $text_MatrixOut['state'] = 'normal'
+    $text_MatrixOut.delete(1.0, 10.40)
+    $text_MatrixOut.insert(1.0, message)
     $text_MatrixOut['state'] = 'disabled'
 end
 
@@ -294,12 +503,66 @@ def convertMatrixToInteger(matrix)
     col = findCol(matrix)
     row = findRow(matrix)
     matrixNew = Array.new(row){Array.new(col)}
-    for i in 0..col-1
-        for j in 0..row-1
+    for i in 0..row-1
+        for j in 0..col-1
             matrixNew[i][j] = matrix[i][j].to_i
         end
     end
     return matrixNew
+end
+
+def exponent(matrixTmp, input)
+  # the double splat operator returns exponent of matrix
+  input = input.to_i
+  return *matrixTmp**input #splat operator make "Matrix" go away
+end
+
+#scaler function
+def scaler(matrix, mat_height, mat_width, input)
+  row, col = mat_width, mat_height
+  matrixC = Array.new(row){Array.new(col)}
+  for i in 0..col-1
+    for j in 0..row-1
+      #multiply by input and store in different matrix
+      matrixC[i][j] = matrix[i][j] * input
+    end
+  end
+  return matrixC
+end
+
+#fraction to decimal function
+def to_Decimal(matrix, mat_height, mat_width)
+  row, col = mat_width, mat_height
+  matrixC = Array.new(row){Array.new(col)}
+  #loop through matrix
+  for i in 0..col-1
+    for j in 0..row-1
+      #change fraction to decimal and round to the 5th
+      matrixC[i][j] = matrix[i][j].to_f.round(5)
+    end
+  end
+  return matrixC
+end
+
+def matrixOnlyDigits(matrix)
+    row = findRow(matrix)
+    col = findCol(matrix)
+    #matrix = convertMatrixToInteger(matrix)
+
+    for i in 0..row-1
+        for j in 0..col-1
+            if (is_letter?(matrix[i][j]))
+                return false
+            end
+        end
+    end
+    return true
+end
+
+def is_letter?(str)
+    # Use 'str[/[a-zA-Z]*/] == str' to let all_letters
+    # yield true for the empty string
+    str[/[a-zA-Z]+/]  == str
 end
 
 #function adds 2 matrices
@@ -307,14 +570,13 @@ def add(matrixA, matrixB, row, col)
   #take matrix size and store into row & col
   #declare 3rd matrix with size of matrix width and height
   matrixC = Array.new(row){Array.new(col)}
-  for i in 0..col-1
-    for j in 0..row-1
+  for i in 0..row-1
+    for j in 0..col-1
       #add and store into 3rd matrix
       matrixC[i][j] = matrixA[i][j].to_i + matrixB[i][j].to_i
     end
   end
-print "\nMatrix A + Matrix B\n", matrixC
-return matrixC
+  return matrixC
 end
 
 #function subtracts 2 matrices
@@ -322,40 +584,37 @@ def subtract(matrixA, matrixB, row, col) #A and B must be same size
   #take matrix size and store into row & col
   #declare 3rd matrix with size of matrix width and height
   matrixC = Array.new(row){Array.new(col)}
-  for i in 0..col-1
-    for j in 0..row-1
+  for i in 0..row-1
+    for j in 0..col-1
       #subtract and store into 3rd matrix
       matrixC[i][j] = matrixA[i][j].to_i - matrixB[i][j].to_i
     end
   end
-print "\nMatrix A - Matrix B\n", matrixC
-return matrixC
+  return matrixC
 end
 
 #fuction for matrix multiplication
-def multiply(matrixA, matrixB, row, col) #A's columns must equal B's rows
-  #row, col = $matA_width, $matB_height
+def multiply(matrix1, matrix2, row1, col1, row2, col2) #A's columns must equal B's rows
       #create a 3rd matrix
       #3rd matrix will have size of matrix A's column
       # and matrix B's row.
-  matrixC = Array.new(matrixA.length){Array.new(matrixB[0].length)}
+  matrix = Array.new(row1){Array.new(col2)}
 
-  for i in 0..col - 1
-    for j in 0..row - 1
-      matrixC[i][j] = 0  #set all to 0 initially
+  for i in 0..matrix.length - 1
+    for j in 0..matrix[0].length - 1
+      matrix[i][j] = 0  #set all to 0 initially
     end
   end
 
-  for i in 0..matrixC.length - 1
-    for j in 0..matrixC[0].length - 1
-      for k in 0..matrixA[0].length - 1
+  for i in 0..matrix.length - 1
+    for j in 0..matrix[0].length - 1
+      for k in 0..matrix1[0].length - 1
         #multiplication of matrices is added to 3rd matrix
-        matrixC[i][j] += matrixA[i][k].to_i * matrixB[k][j].to_i
+        matrix[i][j] += matrix1[i][k].to_i * matrix2[k][j].to_i
       end
     end
   end
-  print "\nMatrix A * Matrix B\n", matrixC
-  return matrixC
+  return matrix
 end
 
 #Identity matrix function
@@ -370,7 +629,6 @@ def identity(size)  #matrix must be square
       end
     end
   end
-  print "\n\nIdentity matrix: ", matrixC, "\n"
   return matrixC
 end
 
@@ -384,6 +642,5 @@ def transpose(matrix, height, width)
       matrixC[j][i] = matrix[i][j]
     end
   end
-  print "\nTranspose of matrix ", matrixC,"\n"
   return matrixC
 end

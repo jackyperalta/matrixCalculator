@@ -51,6 +51,18 @@ Tk.mainloop
 #Code for storing csv to array/matrix
 require 'csv'
 
+#Checks for any nils in matrix
+def error_check(matrix, mat_height, mat_width)
+  for i in 0..mat_height-1
+    for j in 0..mat_width-1
+      if matrix[i][j] == nil 
+        print("\nERROR DETECTED: Matrix size is not consistent\n")
+        return
+      end
+    end
+  end
+end
+
 
 #function adds 2 matrices
 def add(matrixA, matrixB)
@@ -191,6 +203,8 @@ $matA_height = matrixA.length  #array.length gets you height
 $matA_width = matrixA[0].length #array[0].length gets you width
 print "\nMatrix A has a size of ", $matA_height, "x", $matA_width, "\n"
 
+error_check(matrixA, $matA_height, $matA_width) #must be done before in coverstion
+
 
 index = 0
 puts "\n\nMatrix B\n"
@@ -206,6 +220,8 @@ print matrixB
 $matB_height = matrixB.length
 $matB_width = matrixB[0].length
 print "\nMatrix B has a size of ", $matB_height, "x", $matB_width, "\n"
+
+error_check(matrixB, $matB_height, $matB_width)
 
 print "\n\n"
 #convert strings to ints

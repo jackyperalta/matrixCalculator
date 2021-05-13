@@ -270,9 +270,12 @@ def btn_binaryBcopytoA_click
     end
 end
 
+# ADD check if is determinant here
 def btn_outToA_click
     if ($matrixOut == nil)
         insert_MatrixOut_ERROR("Nothing outputted to copy..")
+    elsif ($matrixOut.is_a? Integer)
+        insert_MatrixOut_ERROR("Cannot output determinant to A..")
     else
         $matrixA = $matrixOut
         insert_MatrixA($matrixOut)
@@ -282,6 +285,8 @@ end
 def btn_outToB_click
     if ($matrixOut == nil)
         insert_MatrixOut_ERROR("Nothing outputted to copy..")
+    elsif ($matrixOut.is_a? Integer)
+        insert_MatrixOut_ERROR("Cannot output determinant to B..")
     else
         $matrixB = $matrixOut
         insert_MatrixB($matrixOut)
@@ -343,21 +348,25 @@ def btn_loadMatrixA_click
     if ($matrixAFileName == nil)
         insert_MatrixOut_ERROR("No file selected for MatrixA..")
     else
-        enableAllBtns('A')
         row, col = 0, 0
         matrixAtmp = Array.new(row){Array.new(col)}
         CSV.foreach($matrixAFileName) do |row|
             matrixAtmp.push(row.to_a)
         end
-        if (matrixOnlyDigits(matrixAtmp))
+        if (!matrixIsComplete(matrixAtmp))
+            insert_MatrixOut_ERROR("Empty values not allowed in .csv file..")
+        elsif (!matrixOnlyDigits(matrixAtmp))
+                insert_MatrixOut_ERROR("Letters not allowed in .csv file..")
+        elsif (!matrixSizeIsCorrect(matrixAtmp))
+            insert_MatrixOut_ERROR("Matrix size must be at most 10x10..")
+        else
+            enableAllBtns('A')
             $matrixA = matrixAtmp
             insert_MatrixA($matrixA)
             # updating filename to GUI
             file = Pathname.new($matrixAFileName).basename
             $label_MatrixA['textvariable'] = $label_MatrixAText
             $label_MatrixAText.value = file
-        else
-            insert_MatrixOut_ERROR("Letters not allowed in .csv file..")
         end
     end
 end
@@ -366,21 +375,25 @@ def btn_loadMatrixB_click
     if ($matrixBFileName == nil)
         insert_MatrixOut_ERROR("No file selected for MatrixB..")
     else
-        enableAllBtns('B')
         row, col = 0, 0
         matrixBtmp = Array.new(row){Array.new(col)}
         CSV.foreach($matrixBFileName) do |row|
             matrixBtmp.push(row.to_a)
         end
-        if (matrixOnlyDigits(matrixBtmp))
+        if (!matrixIsComplete(matrixBtmp))
+            insert_MatrixOut_ERROR("Empty values not allowed in .csv file..")
+        elsif (!matrixOnlyDigits(matrixBtmp))
+                insert_MatrixOut_ERROR("Letters not allowed in .csv file..")
+        elsif (!matrixSizeIsCorrect(matrixBtmp))
+            insert_MatrixOut_ERROR("Matrix size must be at most 10x10..")
+        else
+            enableAllBtns('B')
             $matrixB = matrixBtmp
             insert_MatrixB($matrixB)
             # updating filename to GUI
             file = Pathname.new($matrixBFileName).basename
             $label_MatrixB['textvariable'] = $label_MatrixBText
             $label_MatrixBText.value = file
-        else
-            insert_MatrixOut_ERROR("Letters not allowed in .csv file..")
         end
     end
 end
@@ -547,8 +560,6 @@ end
 def matrixOnlyDigits(matrix)
     row = findRow(matrix)
     col = findCol(matrix)
-    #matrix = convertMatrixToInteger(matrix)
-
     for i in 0..row-1
         for j in 0..col-1
             if (is_letter?(matrix[i][j]))
@@ -559,10 +570,35 @@ def matrixOnlyDigits(matrix)
     return true
 end
 
+def matrixSizeIsCorrect(matrix)
+    row = findRow(matrix)
+    col = findCol(matrix)
+    if (row > 9 || row < 0 || col > 9 || col < 0)
+        return false
+    end
+    return true
+end
+
+def matrixIsComplete(matrix)
+    mat_height = findRow(matrix)
+    mat_width = findCol(matrix)
+    for i in 0..mat_height-1
+        for j in 0..mat_width-1
+            if matrix[i][j] == nil
+                return false
+            end
+        end
+    end
+    return true
+end
+
 def is_letter?(str)
     # Use 'str[/[a-zA-Z]*/] == str' to let all_letters
     # yield true for the empty string
-    str[/[a-zA-Z]+/]  == str
+    if (str[/[a-zA-Z]+/]  == str)
+        return true
+    end
+    return false
 end
 
 #function adds 2 matrices

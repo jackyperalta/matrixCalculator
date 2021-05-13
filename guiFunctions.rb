@@ -84,7 +84,6 @@ def btn_unaryDetA_click
         matrixA = convertMatrixToInteger($matrixA)
         matrixtmp = Matrix[*matrixA]
         matrix = matrixtmp.determinant()
-        puts matrix
         insert_MatrixOut(matrix)
     else
         insert_MatrixOut_ERROR("MatrixA must be square matrix..")

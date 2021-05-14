@@ -34,12 +34,11 @@ description: Implementation of a matrix calculator  -->
 </head>
 <body>
     <h2>Matrix Calculator</h2>
-    <hr/>
     <input type="file" id="fileUpload" />
     <input type="button" id="upload" value="Load A" onclick = "LoadA()" />
     <input type="file" id="secondUpload" />
     <input type="button" id="upload2" value="Load B" onclick = "LoadB()" />
-    <hr/>
+    <hr>
     <div class="createTable" id="aCSV"></div> <!-- here goes Matrix A! --> 
     <div class="createTable" id="bCSV"></div> <!-- here goes Matrix B! --> 
     <div class="createTable" id="resultTable"></div> <!-- here goes our results! -->
@@ -127,8 +126,8 @@ description: Implementation of a matrix calculator  -->
 
     function LoadB() {
         var fileUpload = document.getElementById("secondUpload");
-        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
         var detectLetter = /^[A-Za-z]+$/;
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
         if (regex.test(fileUpload.value.toLowerCase())) {
             if (typeof (FileReader) != "undefined") {
                 var reader = new FileReader();
@@ -294,7 +293,7 @@ description: Implementation of a matrix calculator  -->
                 alert('Matrix must be a square.');
             }
         } catch (error) {
-            alert('Matrix must only contain integers.');
+            alert('All matrix values must be integers.');
         }
     }
 
@@ -308,7 +307,7 @@ description: Implementation of a matrix calculator  -->
                 alert('Matrix must be a square.');
             }
         } catch (err){
-            alert('Matrix must only contain integers.');
+            alert('All matrix values must be integers.');
         }
     }
 
@@ -320,7 +319,8 @@ description: Implementation of a matrix calculator  -->
                 for(var i = 0; i < A_rowLength; i++){
                     for(var j = 0; j < A_colLength; j++){
                         var z = document.getElementById('c'+i+j);
-                        z.innerHTML = invValue.subset(math.index(i, j));
+                        var roundInt = Math.round(invValue.subset(math.index(i, j)) * 100000) / 100000; // rounding values
+                        z.innerHTML = roundInt;
                     }
                 }
                 console.log(invValue);
@@ -328,7 +328,7 @@ description: Implementation of a matrix calculator  -->
                 alert('Matrix must be a square.');
             }
         } catch (error) {
-            alert('Matrix must only contain integers.');
+            alert('All matrix values must be integers.');
         }
     }
 
@@ -340,7 +340,8 @@ description: Implementation of a matrix calculator  -->
                 for(var i = 0; i < B_rowLength; i++){
                     for(var j = 0; j < B_colLength; j++){
                         var z = document.getElementById('c'+i+j);
-                        z.innerHTML = invValue.subset(math.index(i, j));
+                        var roundInt = Math.round(invValue.subset(math.index(i, j)) * 100000) / 100000; // rounding values
+                        z.innerHTML = roundInt;
                     }
                 }
                 console.log(invValue);
@@ -348,7 +349,7 @@ description: Implementation of a matrix calculator  -->
                 alert('Matrix must be a square.');
             }
         } catch (error) {
-            alert('Matrix must only contain integers.');
+            alert('All matrix values must be integers.');
         }
     }
 
@@ -369,7 +370,7 @@ description: Implementation of a matrix calculator  -->
                 alert('Matrix must be a square.');
             }
         } catch (error) {
-            alert('Matrix must only contain integers.');
+            alert('All matrix values must be integers.');
         }
     }
 
@@ -390,7 +391,7 @@ description: Implementation of a matrix calculator  -->
                 alert('Matrix must be a square.');
             }
         } catch (error) {
-            alert('Matrix must only contain integers.');
+            alert('All matrix values must be integers.');
         }
     }
 
@@ -461,7 +462,7 @@ description: Implementation of a matrix calculator  -->
                 alert('Matrix A columns must equal Matrix B rows.')
             }
         } catch (error) {
-            alert('Matrix must only contain integers.');
+            alert('All matrix values must be integers.');
         }
     }
 
@@ -482,7 +483,7 @@ description: Implementation of a matrix calculator  -->
                 alert('Matrix B columns must equal Matrix A rows.')
             }
         } catch (error) {
-            alert('Matrix must only contain integers.');
+            alert('All matrix values must be integers.');
         }
     }
 

@@ -5,6 +5,9 @@ TkLabel.new(root) do
 end
 root.geometry('1010x700-5+40')
 
+# -- Start of button definitions --
+# , each button will have its corresponding command function
+
 # Open file buttons
 btn_openMatrixA = TkButton.new(root) do
     text " OPEN MatrixA file "

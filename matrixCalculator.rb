@@ -1,7 +1,7 @@
    # course: cmps3500
    # CLASS Project
    # RUBY IMPLEMENTATION OF A CUSTOM MATRIX CALCULATION
-   # date: 4/24/2021
+   # date: 5/14/2021
    # Student 1: Jacqueline Peralta
    # Student 2: Angel Lopez
    # Student 3: Aldair Martinez
@@ -29,11 +29,11 @@ $entry_unaryPowerB_Var = TkVariable.new
 $label_MatrixAText = TkVariable.new
 $label_MatrixBText = TkVariable.new
 
-load 'guiElements.rb'
-load 'guiFunctions.rb'
+load 'guiElements.rb'       # used for defining and placing widgets in gui
+load 'guiFunctions.rb'      # defines functions which execute based on button pressed
 
 # disable all buttons for error detection
-disableAllBtns('A')
+disableAllBtns('A')     # will be enabled once a valid matrix is inputted 
 disableAllBtns('B')
 
 Tk.mainloop

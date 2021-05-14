@@ -95,24 +95,38 @@ description: Implementation of a matrix calculator  -->
                 reader.onload = function (e) {
                     var table = document.createElement("table");
                     table.setAttribute("id", "table1"); // give table an id to later count length of rows and columns
+                    table.setAttribute("style", "border: 2px solid blue"); 
                     var rows = e.target.result.split("\n");
-                    for (var i = 0; i < rows.length - 1; i++) {
-                        var row = table.insertRow(-1);
-                        var cells = rows[i].split(",");
-                        for (var j = 0; j < cells.length; j++) {
-                            var cell = row.insertCell(-1);
-                            cell.innerHTML = cells[j];
-                            var tdID = 'a'+i+j; // give each cell an id to reference later when doing the math
-                            cell.setAttribute("id", tdID);
+                    if(rows.length <= 11){
+                        for (var i = 0; i < rows.length - 1; i++) {
+                            var row = table.insertRow(-1);
+                            var cells = rows[i].split(",");
+                            if(cells.length <= 11) {
+                                for (var j = 0; j < cells.length; j++) {
+                                    var cell = row.insertCell(-1);
+                                    cell.innerHTML = cells[j];
+                                    if(cell.innerHTML == ''){
+                                        alert("No empty values allowed.");
+                                        return;
+                                    }
+                                    var tdID = 'a'+i+j; // give each cell an id to reference later when doing the math
+                                    cell.setAttribute("id", tdID);
+                                }
+                            } else {
+                                alert("Can't upload matrix bigger than 10x10.");
+                                return;
+                            }
                         }
+                        var aCSV = document.getElementById("aCSV");
+                        aCSV.innerHTML = "";
+                        aCSV.appendChild(table);
+                        // defining global variables 
+                        A_rowLength = document.getElementById('table1').rows.length;
+                        A_colLength = document.getElementById('table1').rows[0].cells.length;
+                        table1 = document.getElementById('table1');
+                    } else {
+                        alert("Can't upload matrix bigger than 10x10.");
                     }
-                    var aCSV = document.getElementById("aCSV");
-                    aCSV.innerHTML = "";
-                    aCSV.appendChild(table);
-                    // defining global variables 
-                    A_rowLength = document.getElementById('table1').rows.length;
-                    A_colLength = document.getElementById('table1').rows[0].cells.length;
-                    table1 = document.getElementById('table1');
                 }
                 reader.readAsText(fileUpload.files[0]);
             } else {
@@ -133,24 +147,37 @@ description: Implementation of a matrix calculator  -->
                 var reader = new FileReader();
                 reader.onload = function (e) {
                     var table = document.createElement("table");
-                    table.setAttribute('id', 'table2');
+                    table.setAttribute('id', 'table2'); table.setAttribute("style", "border: 2px solid green"); 
                     var rows = e.target.result.split("\n");
-                    for (var i = 0; i < rows.length - 1; i++) {
-                        var row = table.insertRow(-1);
-                        var cells = rows[i].split(",");
-                        for (var j = 0; j < cells.length; j++) {
-                            var cell = row.insertCell(-1);
-                            cell.innerHTML = cells[j];
-                            var tdID = 'b'+i+j;
-                            cell.setAttribute("id", tdID );
+                    if(rows.length <= 11){
+                        for (var i = 0; i < rows.length - 1; i++) {
+                            var row = table.insertRow(-1);
+                            var cells = rows[i].split(",");
+                            if(cells.length <= 11){
+                                for (var j = 0; j < cells.length; j++) {
+                                    var cell = row.insertCell(-1);
+                                    cell.innerHTML = cells[j];
+                                    if(cell.innerHTML == ''){
+                                        alert("No empty values allowed.");
+                                        return;
+                                    }
+                                    var tdID = 'b'+i+j;
+                                    cell.setAttribute("id", tdID );
+                                }
+                            } else {
+                                alert("Can't upload matrix bigger than 10x10.");
+                                break;
+                            }
                         }
+                        var bCSV = document.getElementById("bCSV");
+                        bCSV.innerHTML = "";
+                        bCSV.appendChild(table);
+                        B_rowLength = document.getElementById('table2').rows.length;
+                        B_colLength = document.getElementById('table2').rows[0].cells.length;
+                        table2 = document.getElementById('table2');
+                    } else {
+                        alert("Can't upload matrix bigger than 10x10.");
                     }
-                    var bCSV = document.getElementById("bCSV");
-                    bCSV.innerHTML = "";
-                    bCSV.appendChild(table);
-                    B_rowLength = document.getElementById('table2').rows.length;
-                    B_colLength = document.getElementById('table2').rows[0].cells.length;
-                    table2 = document.getElementById('table2');
                 }
                 reader.readAsText(fileUpload.files[0]);
             } else {
@@ -167,8 +194,6 @@ description: Implementation of a matrix calculator  -->
         var table = document.createElement('table');
         table.setAttribute('id', 'table3'); table.setAttribute("style", "border: 2px solid");
         var tbdy = document.createElement('tbody');
-        /* Although we can load matrices bigger than 10x10, the size of result table will
-         ensure that this calculator only works up to 10x10 matrices */
         for (var i = 0; i < 10; i++) {
             var tr = document.createElement('tr');
             for (var j = 0; j < 10; j++) {
@@ -185,7 +210,7 @@ description: Implementation of a matrix calculator  -->
         generateTable = function(){}; // point to empty function to make sure we only call it once
     }
 
-    function tableToArray(table) {
+    function tableToArray(table) { // converting table to an array
         var result  = [].reduce.call(table.rows, function (result, row) {
             result.push([].reduce.call(row.cells, function(res, cell) {
                 res.push(cell.textContent);
@@ -202,7 +227,7 @@ description: Implementation of a matrix calculator  -->
         if(A_rowLength == A_colLength) {
             for(var i = 0; i < A_rowLength; i++){
                 for(var j = 0; j < A_colLength; j++){
-                    var x = document.getElementById('a'+i+j);
+                    var x = document.getElementById('a'+i+j); // similar to a[i][j]
                     if(i == j) {
                         x.innerHTML = '1';
                     } else {
@@ -235,7 +260,7 @@ description: Implementation of a matrix calculator  -->
 
     function nxA () { // Scalar n times A: nA where n is an integer
         document.getElementById('answerBox').value = "";
-        var detectLetter = /^[A-Za-z]+$/;
+        //var detectLetter = /^[A-Za-z]+$/;
         for(var i = 0; i < A_rowLength; i++){
             for(var j = 0; j < A_colLength; j++){
                 var x = document.getElementById('a'+i+j);
@@ -248,7 +273,7 @@ description: Implementation of a matrix calculator  -->
 
     function nxB () { // Scalar n times B: nA where n is an integer
         document.getElementById('answerBox').value = "";
-        var detectLetter = /^[A-Za-z]+$/;
+        //var detectLetter = /^[A-Za-z]+$/;
         for(var i = 0; i < B_rowLength; i++){
             for(var j = 0; j < B_colLength; j++){
                 var y = document.getElementById('b'+i+j);

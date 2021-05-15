@@ -409,7 +409,7 @@ end
 def insert_MatrixA (matrix)
     enableAllBtns('A')
     $text_MatrixA['state'] = 'normal'
-    $text_MatrixA.delete(1.0, 10.40)
+    $text_MatrixA.delete(1.0, 20.80)
     i = 1
     j = 0
     col = findCol(matrix)
@@ -437,7 +437,7 @@ end
 def insert_MatrixB (matrix)
     enableAllBtns('B')
     $text_MatrixB['state'] = 'normal'
-    $text_MatrixB.delete(1.0, 10.40)
+    $text_MatrixB.delete(1.0, 20.80)
     i = 1
     j = 0
     col = findCol(matrix)
@@ -465,7 +465,7 @@ end
 def insert_MatrixOut (matrix)
     $matrixOut = matrix
     $text_MatrixOut['state'] = 'normal'
-    $text_MatrixOut.delete(1.0, 10.40)
+    $text_MatrixOut.delete(1.0, 20.80)
     i = 1
     j = 0
     if (matrix.is_a? Integer)       # check if is determinant being outputted to text box
@@ -498,7 +498,7 @@ end
 # function handles error messages to the OUTPUT textbox
 def insert_MatrixOut_ERROR(message)
     $text_MatrixOut['state'] = 'normal'
-    $text_MatrixOut.delete(1.0, 10.40)
+    $text_MatrixOut.delete(1.0, 20.80)
     $text_MatrixOut.insert(1.0, message)
     $text_MatrixOut['state'] = 'disabled'
 end

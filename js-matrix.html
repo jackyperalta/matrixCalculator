@@ -209,6 +209,13 @@ description: Implementation of a matrix calculator  -->
 
         generateTable = function(){}; // point to empty function to make sure we only call it once
     }
+    function ClearC(){
+        for(var i = 0; i < 10; i++){
+            for(var j = 0; j < 10; j++) {
+                document.getElementById("c"+i+j).innerHTML = "";
+            }
+        }
+    }
 
     function tableToArray(table) { // converting table to an array
         var result  = [].reduce.call(table.rows, function (result, row) {
@@ -260,7 +267,7 @@ description: Implementation of a matrix calculator  -->
 
     function nxA () { // Scalar n times A: nA where n is an integer
         document.getElementById('answerBox').value = "";
-        //var detectLetter = /^[A-Za-z]+$/;
+        ClearC();
         for(var i = 0; i < A_rowLength; i++){
             for(var j = 0; j < A_colLength; j++){
                 var x = document.getElementById('a'+i+j);
@@ -273,7 +280,7 @@ description: Implementation of a matrix calculator  -->
 
     function nxB () { // Scalar n times B: nA where n is an integer
         document.getElementById('answerBox').value = "";
-        //var detectLetter = /^[A-Za-z]+$/;
+        ClearC();
         for(var i = 0; i < B_rowLength; i++){
             for(var j = 0; j < B_colLength; j++){
                 var y = document.getElementById('b'+i+j);
@@ -286,21 +293,23 @@ description: Implementation of a matrix calculator  -->
 
     function transA () { // A Transpose: A^T
         document.getElementById('answerBox').value = "";
+        ClearC();
         var array = tableToArray(table1), mA = math.matrix(array), trValue = math.transpose(mA);
-        for(var i = 0; i < A_rowLength; i++){
-            for(var j = 0; j < A_colLength; j++){
+        for(var i = 0; i < A_colLength; i++){
+            for(var j = 0; j < A_rowLength; j++){
                 var z = document.getElementById('c'+i+j);
                 z.innerHTML = trValue.subset(math.index(i, j));
             }
         }
         console.log(trValue);
     }
-
+ 
     function transB () { // B Transpose: B^T 
         document.getElementById('answerBox').value = "";
+        ClearC();
         var array = tableToArray(table2), mB = math.matrix(array), trValue = math.transpose(mB);
-        for(var i = 0; i < B_rowLength; i++){
-            for(var j = 0; j < B_colLength; j++){
+        for(var i = 0; i < B_colLength; i++){
+            for(var j = 0; j < B_rowLength; j++){
                 var z = document.getElementById('c'+i+j);
                 z.innerHTML = trValue.subset(math.index(i, j));
             }
@@ -310,6 +319,7 @@ description: Implementation of a matrix calculator  -->
 
     function detA () { // Determinant of A: det(A)
         var ansTxt = document.getElementById('answerBox'), matrix = tableToArray(table1);
+        ClearC();
         try{
             if (A_rowLength == A_colLength){
                 var detValue = math.det(matrix); console.log(detValue);
@@ -324,6 +334,7 @@ description: Implementation of a matrix calculator  -->
 
     function detB () { // Determinant of B: det(B)
         var ansTxt = document.getElementById('answerBox'), matrix = tableToArray(table2);
+        ClearC();
         try {
             if (B_rowLength == B_colLength){
                 var detValue = math.det(matrix); console.log(detValue);
@@ -338,6 +349,7 @@ description: Implementation of a matrix calculator  -->
 
     function invA () { // Inverse of A: A^-1 
         document.getElementById('answerBox').value = "";
+        ClearC();
         try {
             if (A_rowLength == A_colLength){
                 var array = tableToArray(table1), mA = math.matrix(array), invValue = math.inv(mA);
@@ -359,6 +371,7 @@ description: Implementation of a matrix calculator  -->
 
     function invB () { // Inverse of B: B^-1 
         document.getElementById('answerBox').value = "";
+        ClearC();
         try{
             if(B_rowLength == B_colLength){
                 var array = tableToArray(table2), mB = math.matrix(array), invValue = math.inv(mB);
@@ -380,6 +393,7 @@ description: Implementation of a matrix calculator  -->
 
     function ApowerN () { // Integer power of A when A is a square matrix: A^n for 1 ≤ n ≤ 10
         document.getElementById('answerBox').value = "";
+        ClearC();
         var array = tableToArray(table1), mA = math.matrix(array), n = document.getElementById('n');
         try{
             if(A_rowLength == A_colLength){
@@ -401,6 +415,7 @@ description: Implementation of a matrix calculator  -->
 
     function BpowerN () { // Integer power of B when B is a square matrix: B^n for 1 ≤ n ≤ 10
         document.getElementById('answerBox').value = "";
+        ClearC();
         var array = tableToArray(table2), mB = math.matrix(array), n = document.getElementById('n');
         try{
             if(B_rowLength == B_colLength){
@@ -423,6 +438,7 @@ description: Implementation of a matrix calculator  -->
     /* BINARY OPS */
     function addAB () { // Add A and B: A + B
         document.getElementById('answerBox').value = "";
+        ClearC();
         if(A_rowLength == B_rowLength && A_colLength == B_colLength){
             for(var i = 0; i < A_rowLength; i++){ // make sure their the same dimension
                 for(var j = 0; j < B_colLength; j++){
@@ -439,6 +455,7 @@ description: Implementation of a matrix calculator  -->
 
     function subAB () { // Substract B from A: A - B
         document.getElementById('answerBox').value = "";
+        ClearC();
         if(A_rowLength == B_rowLength && A_colLength == B_colLength){
             for(var i = 0; i < A_rowLength; i++){ // make sure their the same dimension
                 for(var j = 0; j < B_colLength; j++){
@@ -455,6 +472,7 @@ description: Implementation of a matrix calculator  -->
 
     function subBA () { // Substract A from B: B - A
         document.getElementById('answerBox').value = "";
+        ClearC();
         if(A_rowLength == B_rowLength && A_colLength == B_colLength){
             for(var i = 0; i < A_rowLength; i++){ // make sure their the same dimension
                 for(var j = 0; j < B_colLength; j++){
@@ -471,6 +489,7 @@ description: Implementation of a matrix calculator  -->
 
     function multAB () { // Multiply A and B: AB
         document.getElementById('answerBox').value = "";
+        ClearC();
         var mA = tableToArray(table1), matrixA = math.matrix(mA);
         var mB = tableToArray(table2), matrixB = math.matrix(mB);
 
@@ -493,6 +512,7 @@ description: Implementation of a matrix calculator  -->
 
     function multBA () { // Multiply B and A: BA
         document.getElementById('answerBox').value = "";
+        ClearC();
         var mA = tableToArray(table1), matrixA = math.matrix(mA);
         var mB = tableToArray(table2), matrixB = math.matrix(mB);
         try {

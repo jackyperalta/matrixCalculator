@@ -587,7 +587,7 @@ end
 def matrixSizeIsCorrect(matrix)
     row = findRow(matrix)
     col = findCol(matrix)
-    if (row > 9 || row < 0 || col > 9 || col < 0)
+    if (row > 10 || row < 0 || col > 10 || col < 0)
         return false
     end
     return true

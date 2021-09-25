@@ -1,101 +1,103 @@
-<!-- course: cmps3500
-CLASS Project
-JAVASCRIPT IMPLEMENTATION OF A CUSTOM MATRIX CALCULATOR
-date: 05/14/21
-Student 1: Jacqueline Peralta
-Student 2: Aldair Martinez
-Student 3: Angel Lopez
-description: Implementation of a matrix calculator  -->
 <!DOCTYPE html>
-<br lang="en">
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Matrix Calculator</title>
+
   <link rel="stylesheet" href="">
-  <style>
+  <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
+
+  <title>Matrix Calculator</title>
+</head>
+<style>
     body
     {
         font-family: Arial;
         font-size: 10pt;
+        background-color: #2F5061;
+        color: #ffff;
+    }
+    h2,h4 {
+        text-align: center;
+        color: #FF7F50;
     }
     .createTable table
     {
         border: 1px solid #ccc;
         float: left;
-        margin-left: 9px;
-        margin-right: 14px;
+        margin-right: 9px;
     }
     .createTable table th, table td
     {
         padding: 7px;
     }
-  </style>
-    <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
-</head>
+</style>
 <body>
     <h2>Matrix Calculator</h2>
-    <input type="file" id="fileUpload" />
-    <input type="button" id="upload" value="Load A" onclick = "LoadA()" />
-    <input type="file" id="secondUpload" />
-    <input type="button" id="upload2" value="Load B" onclick = "LoadB()" />
     <hr>
-    <div class="createTable" id="aCSV"></div> <!-- here goes Matrix A! --> 
-    <div class="createTable" id="bCSV"></div> <!-- here goes Matrix B! --> 
-    <div class="createTable" id="resultTable"></div> <!-- here goes our results! -->
 
-    <table style="margin-top: 350px;"><tr><th>Unary Operations</th></tr></table>
-    <table>
-        <tr>
-            <td><input type="button" value="A=I" onClick="idA()"> </td>
-            <td><input type="button" value="B=I" onClick="idB()"> </td>
-            <td><input type="button" value="A^T" onClick="transA()"> </td>
-            <td><input type="button" value="B^T" onClick="transB()"> </td>
-            <td><input type="button" value="det(A)" onClick="detA()"></td>
-            <td><input type="button" value="det(B)" onClick="detB()"></td>
-            <td><input style="width: 140%; border: 2px solid red" type="text" id="answerBox"></td>
-        </tr>
-    </table>
-    
-    <table>
-        <tr>
-            <td><input type="button" value="inv(A)" onClick="invA()"> </td>
-            <td><input type="button" value="inv(B)" onClick="invB()"> </td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td><input type="button" value="nA" onClick="nxA()"></td>
-            <td><input type="button" value="nB" onClick="nxB()"></td>
-            <td><input type="button" value="A^n" onClick="ApowerN()"></td>
-            <td><input type="button" value="B^n" onClick="BpowerN()"></td>
-            <td><input placeholder="Enter n" type="text" id="n" name="output" size="5"></td>
-        </tr>
-    </table>
-    
-    <table><tr><th>Binary Operations</th></tr></table>
-    <table>
-        <tr>
-            <td><input type="button" value="A + B" onClick="addAB()"></td>
-            <td><input type="button" value="A - B" onClick="subAB()"></td>
-            <td><input type="button" value="B - A" onClick="subBA()"></td>
-            <td><input type="button" value="A x B" onClick="multAB()"></td>
-            <td><input type="button" value="B x A" onClick="multBA()"></td>
-            <td><input type="button" value="Copy A to B" onClick="copyAB()"></td>
-            <td><input type="button" value="Copy B to A" onClick="copyBA()"></td>
-            <td><input type="button" value="Swap A to B" onClick="swap()"></td>
-        </tr>
-    </table>
-    <script type="text/javascript">
+    <aside style="float:right;width:300px;height:835px;">
+        <h3>Upload CSV files</h3>
+        <h5>Only 10x10 matrices or smaller.</h5>
+        <input type="file" id="fileUpload" />
+        <input type="button" style="color: #FF7F50;" id="upload" value="Load A" onclick = "LoadA()" />
+        <br><br>
+        <input type="file" id="2ndUpload" />
+        <input type="button" style="color: #4297A0;" id="upload2" value="Load B" onclick = "LoadB()" />
+        <br><br>
+        <input type="button" value="Clear C" onClick="ClearC()">
+        <br><br><br><br>
+        <h3>Unary Operations</h3>
+        <h5>Identity, Transpose, Determinant, Inverse, Scalar, and Power.</h5>
+        <input type="button" value="A=I" onClick="idA()">
+        <input type="button" value="B=I" onClick="idB()">
+        <input type="button" value="A^T" onClick="transA()">
+        <input type="button" value="B^T" onClick="transB()">
+        <br><br>
+        <input type="button" value="det(A)" onClick="detA()">
+        <input type="button" value="det(B)" onClick="detB()">
+        <input style="width: 58%; border: 2px solid #ffff" type="text" id="answerBox">
+        <br><br>
+        <input type="button" value="inv(A)" onClick="invA()">
+        <input type="button" value="inv(B)" onClick="invB()">
+        <br><br>
+        <input type="button" value="nA" onClick="nxA()">
+        <input type="button" value="nB" onClick="nxB()">
+        <input type="button" value="A^n" onClick="ApowerN()">
+        <input type="button" value="B^n" onClick="BpowerN()">
+        <input placeholder="Enter n" type="text" id="n" name="output" size="5">
+        <br><br><br><br>
+        <h3>Binary Operations</h3>
+        <h5>Addition, Subtraction, Copy, and Swap.</h5>
+        <input type="button" value="A + B" onClick="addAB()">
+        <input type="button" value="A - B" onClick="subAB()">
+        <input type="button" value="B - A" onClick="subBA()">
+        <br><br>
+        <input type="button" value="A x B" onClick="multAB()">
+        <input type="button" value="B x A" onClick="multBA()">
+        <br><br>
+        <input type="button" value="Copy A to B" onClick="copyAB()">
+        <input type="button" value="Copy B to A" onClick="copyBA()">
+        <input type="button" value="Swap A to B" onClick="swap()">
+    </aside>
+    <section style="float:center">
+        <div class="createTable" id="aCSV"></div> <!-- here goes Matrix A! --> 
+        <div class="createTable" id="bCSV"></div> <!-- here goes Matrix B! --> 
+    </section>
+    <div class="createTable" id="resultTable"></div> <!-- here goes the results! -->
+</body>
+<script>
     var A_rowLength, A_colLength, B_rowLength, B_colLength, table1, table2; // declaring global variables
 
     function LoadA() {
         var fileUpload = document.getElementById("fileUpload");
-        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/; // Validate file extension before upload
-        var detectLetter = /^[A-Za-z]+$/;
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/; // Validate file extension before uploading
         if (regex.test(fileUpload.value.toLowerCase())) {
             if (typeof (FileReader) != "undefined") {
                 var reader = new FileReader();
                 reader.onload = function (e) {
                     var table = document.createElement("table");
                     table.setAttribute("id", "table1"); // give table an id to later count length of rows and columns
-                    table.setAttribute("style", "border: 2px solid blue"); 
+                    table.setAttribute("style", "border: 2px solid #FF7F50"); 
                     var rows = e.target.result.split("\n");
                     if(rows.length <= 11){
                         for (var i = 0; i < rows.length - 1; i++) {
@@ -139,15 +141,14 @@ description: Implementation of a matrix calculator  -->
     }
 
     function LoadB() {
-        var fileUpload = document.getElementById("secondUpload");
-        var detectLetter = /^[A-Za-z]+$/;
+        var fileUpload = document.getElementById("2ndUpload");
         var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
         if (regex.test(fileUpload.value.toLowerCase())) {
             if (typeof (FileReader) != "undefined") {
                 var reader = new FileReader();
                 reader.onload = function (e) {
                     var table = document.createElement("table");
-                    table.setAttribute('id', 'table2'); table.setAttribute("style", "border: 2px solid green"); 
+                    table.setAttribute('id', 'table2'); table.setAttribute("style", "border: 2px solid #4297A0"); 
                     var rows = e.target.result.split("\n");
                     if(rows.length <= 11){
                         for (var i = 0; i < rows.length - 1; i++) {
@@ -207,17 +208,19 @@ description: Implementation of a matrix calculator  -->
         table.appendChild(tbdy);
         div.appendChild(table);
 
-        generateTable = function(){}; // point to empty function to make sure we only call it once
+        generateTable = function(){}; // point to an empty function to make sure we only call it once
     }
+
     function ClearC(){
         for(var i = 0; i < 10; i++){
             for(var j = 0; j < 10; j++) {
-                document.getElementById("c"+i+j).innerHTML = "";
+                document.getElementById('c'+i+j).innerHTML = "";
             }
         }
     }
 
-    function tableToArray(table) { // converting table to an array
+    // some of the math library functions only work with matrices so this is to convert the table to array and later array to matrix
+    function tableToArray(table) {
         var result  = [].reduce.call(table.rows, function (result, row) {
             result.push([].reduce.call(row.cells, function(res, cell) {
                 res.push(cell.textContent);
@@ -228,8 +231,9 @@ description: Implementation of a matrix calculator  -->
         return result;
     }
 
-    /* UNARY OPS */
-    function idA () { // Make A and square indentity matrix up to 10x10: A to I
+    /**************************** UNARY OPS ****************************/
+
+    function idA () { // Identity matrix A: A=I
         document.getElementById('answerBox').value = "";
         if(A_rowLength == A_colLength) {
             for(var i = 0; i < A_rowLength; i++){
@@ -247,7 +251,7 @@ description: Implementation of a matrix calculator  -->
         }
     }
 
-    function idB () { // Make B and square indentity matrix up to 10x10: B to I
+    function idB () { // Identity matrix B: B=I
         document.getElementById('answerBox').value = "";
         if(B_rowLength == B_colLength) {
             for(var i = 0; i < B_rowLength; i++){
@@ -267,12 +271,12 @@ description: Implementation of a matrix calculator  -->
 
     function nxA () { // Scalar n times A: nA where n is an integer
         document.getElementById('answerBox').value = "";
-        ClearC();
+        var n = document.getElementById('n');
+
         for(var i = 0; i < A_rowLength; i++){
             for(var j = 0; j < A_colLength; j++){
                 var x = document.getElementById('a'+i+j);
                 var z = document.getElementById('c'+i+j);
-                var n = document.getElementById('n');
                 z.innerHTML = x.innerHTML * n.value; 
             }
         }
@@ -280,20 +284,20 @@ description: Implementation of a matrix calculator  -->
 
     function nxB () { // Scalar n times B: nA where n is an integer
         document.getElementById('answerBox').value = "";
-        ClearC();
+        var n = document.getElementById('n');
+
         for(var i = 0; i < B_rowLength; i++){
             for(var j = 0; j < B_colLength; j++){
                 var y = document.getElementById('b'+i+j);
                 var z = document.getElementById('c'+i+j);
-                var n = document.getElementById('n');
                 z.innerHTML = y.innerHTML * n.value;
             }
         }
+
     }
 
     function transA () { // A Transpose: A^T
         document.getElementById('answerBox').value = "";
-        ClearC();
         var array = tableToArray(table1), mA = math.matrix(array), trValue = math.transpose(mA);
         for(var i = 0; i < A_colLength; i++){
             for(var j = 0; j < A_rowLength; j++){
@@ -303,10 +307,9 @@ description: Implementation of a matrix calculator  -->
         }
         console.log(trValue);
     }
- 
+
     function transB () { // B Transpose: B^T 
         document.getElementById('answerBox').value = "";
-        ClearC();
         var array = tableToArray(table2), mB = math.matrix(array), trValue = math.transpose(mB);
         for(var i = 0; i < B_colLength; i++){
             for(var j = 0; j < B_rowLength; j++){
@@ -319,7 +322,6 @@ description: Implementation of a matrix calculator  -->
 
     function detA () { // Determinant of A: det(A)
         var ansTxt = document.getElementById('answerBox'), matrix = tableToArray(table1);
-        ClearC();
         try{
             if (A_rowLength == A_colLength){
                 var detValue = math.det(matrix); console.log(detValue);
@@ -334,7 +336,6 @@ description: Implementation of a matrix calculator  -->
 
     function detB () { // Determinant of B: det(B)
         var ansTxt = document.getElementById('answerBox'), matrix = tableToArray(table2);
-        ClearC();
         try {
             if (B_rowLength == B_colLength){
                 var detValue = math.det(matrix); console.log(detValue);
@@ -349,7 +350,6 @@ description: Implementation of a matrix calculator  -->
 
     function invA () { // Inverse of A: A^-1 
         document.getElementById('answerBox').value = "";
-        ClearC();
         try {
             if (A_rowLength == A_colLength){
                 var array = tableToArray(table1), mA = math.matrix(array), invValue = math.inv(mA);
@@ -371,7 +371,6 @@ description: Implementation of a matrix calculator  -->
 
     function invB () { // Inverse of B: B^-1 
         document.getElementById('answerBox').value = "";
-        ClearC();
         try{
             if(B_rowLength == B_colLength){
                 var array = tableToArray(table2), mB = math.matrix(array), invValue = math.inv(mB);
@@ -393,7 +392,6 @@ description: Implementation of a matrix calculator  -->
 
     function ApowerN () { // Integer power of A when A is a square matrix: A^n for 1 ≤ n ≤ 10
         document.getElementById('answerBox').value = "";
-        ClearC();
         var array = tableToArray(table1), mA = math.matrix(array), n = document.getElementById('n');
         try{
             if(A_rowLength == A_colLength){
@@ -415,7 +413,6 @@ description: Implementation of a matrix calculator  -->
 
     function BpowerN () { // Integer power of B when B is a square matrix: B^n for 1 ≤ n ≤ 10
         document.getElementById('answerBox').value = "";
-        ClearC();
         var array = tableToArray(table2), mB = math.matrix(array), n = document.getElementById('n');
         try{
             if(B_rowLength == B_colLength){
@@ -435,12 +432,12 @@ description: Implementation of a matrix calculator  -->
         }
     }
 
-    /* BINARY OPS */
+    /**************************** BINARY OPS ****************************/
+
     function addAB () { // Add A and B: A + B
         document.getElementById('answerBox').value = "";
-        ClearC();
         if(A_rowLength == B_rowLength && A_colLength == B_colLength){
-            for(var i = 0; i < A_rowLength; i++){ // make sure their the same dimension
+            for(var i = 0; i < A_rowLength; i++){
                 for(var j = 0; j < B_colLength; j++){
                     var x = document.getElementById('a'+i+j);
                     var y = document.getElementById('b'+i+j);
@@ -455,9 +452,8 @@ description: Implementation of a matrix calculator  -->
 
     function subAB () { // Substract B from A: A - B
         document.getElementById('answerBox').value = "";
-        ClearC();
         if(A_rowLength == B_rowLength && A_colLength == B_colLength){
-            for(var i = 0; i < A_rowLength; i++){ // make sure their the same dimension
+            for(var i = 0; i < A_rowLength; i++){
                 for(var j = 0; j < B_colLength; j++){
                     var x = document.getElementById('a'+i+j);
                     var y = document.getElementById('b'+i+j);
@@ -472,9 +468,8 @@ description: Implementation of a matrix calculator  -->
 
     function subBA () { // Substract A from B: B - A
         document.getElementById('answerBox').value = "";
-        ClearC();
         if(A_rowLength == B_rowLength && A_colLength == B_colLength){
-            for(var i = 0; i < A_rowLength; i++){ // make sure their the same dimension
+            for(var i = 0; i < A_rowLength; i++){
                 for(var j = 0; j < B_colLength; j++){
                     var x = document.getElementById('a'+i+j);
                     var y = document.getElementById('b'+i+j);
@@ -489,7 +484,6 @@ description: Implementation of a matrix calculator  -->
 
     function multAB () { // Multiply A and B: AB
         document.getElementById('answerBox').value = "";
-        ClearC();
         var mA = tableToArray(table1), matrixA = math.matrix(mA);
         var mB = tableToArray(table2), matrixB = math.matrix(mB);
 
@@ -512,7 +506,6 @@ description: Implementation of a matrix calculator  -->
 
     function multBA () { // Multiply B and A: BA
         document.getElementById('answerBox').value = "";
-        ClearC();
         var mA = tableToArray(table1), matrixA = math.matrix(mA);
         var mB = tableToArray(table2), matrixB = math.matrix(mB);
         try {
@@ -535,11 +528,26 @@ description: Implementation of a matrix calculator  -->
     function copyAB () { // copy A into B: A to B
         document.getElementById('answerBox').value = "";
         table2.innerHTML = table1.innerHTML;
+
+        // preventing duplicate id's
+        // without this, not only will the numbers be copied over but the ids as well
+        for(var i = 0; i < B_rowLength; i++){
+            for(var j = 0; j < B_colLength; j++){
+                document.getElementById("table2").rows[i].cells[j].id = 'b'+i+j;
+            }
+        }
     }
 
     function copyBA () { // copy B into A: B to A
         document.getElementById('answerBox').value = "";
         table1.innerHTML = table2.innerHTML;
+
+        for(var i = 0; i < A_rowLength; i++){
+            for(var j = 0; j < A_colLength; j++){
+                document.getElementById("table1").rows[i].cells[j].id = 'a'+i+j;
+            }
+        }
+
     }
 
     function swap () { // Swap A and B: A to B
@@ -547,7 +555,18 @@ description: Implementation of a matrix calculator  -->
         var z = table1.innerHTML;
         table1.innerHTML = table2.innerHTML;
         table2.innerHTML = z;
+
+        for(var i = 0; i < A_rowLength; i++){
+            for(var j = 0; j < A_colLength; j++){
+                document.getElementById("table1").rows[i].cells[j].id = 'a'+i+j;
+            }
+        }
+
+        for(var i = 0; i < B_rowLength; i++){
+            for(var j = 0; j < B_colLength; j++){
+                document.getElementById("table2").rows[i].cells[j].id = 'b'+i+j;
+            }
+        }
     }
-    </script>
-</body>
+</script>
 </html>
